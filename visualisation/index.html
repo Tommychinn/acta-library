@@ -1,0 +1,683 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="description" content="Visualisation exercise flow — internal sales reference.">
+<title>Visualisation Exercise — ACTA Academy</title>
+<style>
+  :root{
+    --ink:#101114;           /* say-this text + headings */
+    --ctx:#2E7CC4;           /* backing context — light blue, held legible on white */
+    --ctx-bg:#F2F7FC;
+    --rule:#E3E6EB;
+    --muted:#6B7280;
+    --ground:#FFFFFF;
+    --measure:68ch;
+    --sans:ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  }
+  /* Deliberate single-theme page: this is read aloud on live calls and must look
+     identical everywhere, so the dark-mode toggle is pinned to the same ground. */
+  @media (prefers-color-scheme: dark){ :root{ --ground:#FFFFFF; --ink:#101114; } }
+  :root[data-theme="dark"],:root[data-theme="light"]{ --ground:#FFFFFF; --ink:#101114; }
+
+  html{ -webkit-text-size-adjust:100%; scroll-behavior:smooth; }
+  body{
+    background:var(--ground); color:var(--ink);
+    font-family:var(--sans); font-size:17px; line-height:1.62;
+    margin:0; padding:0;
+  }
+  .wrap{ display:grid; grid-template-columns:minmax(0,1fr); gap:0; }
+  @media (min-width:1040px){
+    .wrap{ grid-template-columns:264px minmax(0,1fr); align-items:start; }
+  }
+
+  /* ---- jump-to rail: find your place mid-call ---- */
+  nav{ border-bottom:1px solid var(--rule); padding:20px 24px; background:var(--ground); }
+  @media (min-width:1040px){
+    nav{
+      position:sticky; top:0; max-height:100vh; overflow-y:auto;
+      border-bottom:0; border-right:1px solid var(--rule); padding:40px 24px 40px 32px;
+    }
+  }
+  nav .navlabel{
+    font-size:11px; font-weight:700; letter-spacing:.09em; text-transform:uppercase;
+    color:var(--muted); margin:0 0 12px;
+  }
+  nav a{ display:block; text-decoration:none; color:var(--ink); padding:4px 0; line-height:1.35; border-radius:3px; }
+  nav a.toc-l1{ font-weight:700; font-size:14px; margin-top:12px; }
+  nav a.toc-l2{ font-weight:400; font-size:13.5px; color:#3F444C; padding-left:12px; }
+  nav a:hover{ color:var(--ctx); }
+  nav a:focus-visible,main a:focus-visible,.postab:focus-visible{ outline:2px solid var(--ctx); outline-offset:2px; }
+  nav .home{ font-size:13px; color:var(--muted); margin:0 0 22px; }
+  nav .home a{ display:inline; color:var(--muted); }
+  nav .home a:hover{ color:var(--ctx); }
+
+  main{ padding:36px 24px 96px; max-width:var(--measure); }
+  @media (min-width:1040px){ main{ padding:56px 40px 120px; } }
+
+  /* ---- masthead + legend ---- */
+  .masthead{ margin:0 0 8px; }
+  h1{
+    font-size:clamp(28px,4.2vw,38px); line-height:1.14; font-weight:800;
+    letter-spacing:-.021em; text-wrap:balance; margin:0 0 14px;
+  }
+  .legend{
+    display:flex; flex-wrap:wrap; gap:8px 22px; align-items:center;
+    padding:14px 16px; border:1px solid var(--rule); border-radius:8px;
+    margin:0 0 26px; font-size:13.5px;
+  }
+  .legend b{ font-weight:700; }
+  .legend .sw{ display:inline-block; width:9px; height:9px; border-radius:50%; margin-right:7px; vertical-align:middle; }
+  .legend .say .sw{ background:var(--ink); }
+  .legend .ctxk .sw{ background:var(--ctx); }
+  .legend .ctxk{ color:var(--ctx); }
+
+  /* ---- headings ---- */
+  h2,h3,h4{ color:var(--ink); text-wrap:balance; }
+  h2{
+    font-size:25px; font-weight:800; letter-spacing:-.015em; line-height:1.22;
+    margin:52px 0 14px; padding-top:22px; border-top:2px solid var(--ink);
+  }
+  h3{ font-size:19.5px; font-weight:700; line-height:1.28; margin:34px 0 10px; }
+  h4{ font-size:16.5px; font-weight:700; line-height:1.3; margin:24px 0 8px; }
+  h2:first-child,h3:first-child{ margin-top:0; }
+  #step-by-step{ border-top:0; padding-top:0; margin-top:26px; }
+
+  p{ margin:0 0 13px; }
+  hr{ border:0; border-top:1px solid var(--rule); margin:38px 0; }
+
+  /* ---- backing context ---- */
+  .ctx{ color:var(--ctx); }
+  p.ctx-block,li.ctx-block{ color:var(--ctx); }
+  li.ctx-block::marker{ color:var(--ctx); }
+  li.ctx-block > ul,li.ctx-block > ol{ color:var(--ink); }
+  li.ctx-block > ul li::marker,li.ctx-block > ol li::marker{ color:var(--muted); }
+  p:not(.ctx-block) .ctx,li:not(.ctx-block) .ctx{ font-style:italic; }
+  .callout{
+    background:var(--ctx-bg); border:1px solid #D6E4F2; border-left:3px solid var(--ctx);
+    border-radius:8px; padding:16px 18px; margin:0 0 26px; color:var(--ctx);
+  }
+  .callout p{ margin:0 0 9px; }
+  .callout p:last-child{ margin-bottom:0; }
+  .callout strong{ color:var(--ctx); }
+
+  /* ---- lists ---- */
+  ul,ol{ margin:0 0 13px; padding-left:1.4em; }
+  li{ margin:0 0 7px; }
+  li > ul,li > ol{ margin:7px 0 0; }
+  li::marker{ color:var(--muted); }
+  ul ul{ list-style-type:circle; }
+  ul ul ul{ list-style-type:square; }
+  ol{ list-style-type:decimal; }
+  ol ol{ list-style-type:lower-alpha; }
+  ol ol ol{ list-style-type:lower-roman; }
+  strong{ font-weight:700; }
+
+  /* ---- step list: numbered stages of the exercise ---- */
+  ol.steps{ list-style:none; padding-left:0; counter-reset:step; margin:0; }
+  ol.steps > li{
+    counter-increment:step; position:relative; padding-left:44px; margin:0 0 26px;
+  }
+  ol.steps > li::before{
+    content:counter(step); position:absolute; left:0; top:2px;
+    width:28px; height:28px; border-radius:50%; border:1.5px solid var(--ink);
+    display:grid; place-items:center; font-size:14px; font-weight:700; line-height:1;
+  }
+  .steplabel{ font-weight:700; display:block; margin:0 0 6px; }
+
+  /* ---- position tabs ---- */
+  .posbar{
+    position:sticky; top:0; z-index:5; background:var(--ground);
+    border-bottom:1px solid var(--rule); padding:12px 0 12px;
+    margin:0 0 26px;
+  }
+  .posbar .barlabel{
+    font-size:11px; font-weight:700; letter-spacing:.09em; text-transform:uppercase;
+    color:var(--muted); margin:0 0 9px;
+  }
+  .postabs{ display:flex; flex-wrap:wrap; gap:7px; }
+  .postab{
+    font:inherit; font-size:13.5px; font-weight:600; line-height:1;
+    padding:8px 13px; border:1px solid var(--rule); border-radius:999px;
+    background:var(--ground); color:#3F444C; cursor:pointer;
+  }
+  .postab:hover{ border-color:var(--ctx); color:var(--ctx); }
+  .postab[aria-selected="true"]{ background:var(--ink); border-color:var(--ink); color:#fff; }
+  .variant[hidden]{ display:none; }
+  .vartag{
+    display:inline-block; font-size:11px; font-weight:700; letter-spacing:.07em;
+    text-transform:uppercase; color:var(--ctx); background:var(--ctx-bg);
+    border:1px solid #D6E4F2; border-radius:4px; padding:2px 7px; margin-left:8px;
+    vertical-align:2px;
+  }
+
+  /* ---- dialogue transcripts ---- */
+  .dlg{ margin:0 0 13px; padding-left:14px; border-left:2px solid var(--rule); }
+  .dlg p{ margin:0 0 9px; }
+  .dlg .who{ font-weight:700; }
+  .dlg .coach .who{ color:var(--ink); }
+  .dlg .player .who{ color:var(--ctx); }
+  .subhd{
+    font-size:12px; font-weight:700; letter-spacing:.07em; text-transform:uppercase;
+    color:var(--muted); margin:24px 0 9px;
+  }
+
+  /* ---- tables ---- */
+  .tablewrap{ overflow-x:auto; margin:0 0 20px; }
+  table{ border-collapse:collapse; width:100%; min-width:640px; font-size:14.5px; }
+  th,td{ border:1px solid var(--rule); padding:10px 12px; text-align:left; vertical-align:top; }
+  th{ background:#F7F8FA; font-weight:700; }
+  td:first-child{ font-weight:700; white-space:nowrap; }
+  td:last-child{ color:var(--ctx); }
+
+  @media print{
+    nav,.posbar{ display:none; }
+    body{ font-size:11.5pt; }
+    main{ max-width:none; padding:0; }
+    h2{ break-after:avoid; } h3,h4{ break-after:avoid; }
+    li,p{ break-inside:avoid; }
+    .callout{ background:#F2F7FC !important; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <nav aria-label="Jump to section">
+    <p class="home"><a href="../">← ACTA sales library</a></p>
+    <p class="navlabel">Jump to</p>
+    <a class="toc-l1" href="#step-by-step">Step-by-step breakdown</a>
+    <a class="toc-l2" href="#part-1">Part 1 — The visualisation exercise</a>
+    <a class="toc-l2" href="#part-2">Part 2 — The debrief</a>
+    <a class="toc-l1" href="#example-maddie">Example Flow 1 — Maddie</a>
+    <a class="toc-l1" href="#example-aiden">Example Flow 2 — Aiden</a>
+    <a class="toc-l1" href="#question-explainer">Question explainer &amp; categories</a>
+    <a class="toc-l2" href="#q-exercise">Visualisation exercise questions</a>
+    <a class="toc-l2" href="#q-debrief">Debrief questions</a>
+    <a class="toc-l1" href="#delivery-principles">Delivery principles</a>
+    <a class="toc-l1" href="#overall-summary">Overall summary</a>
+  </nav>
+
+  <main>
+    <header class="masthead">
+      <h1>Visualisation Exercise</h1>
+      <div class="legend">
+        <span class="say"><span class="sw"></span><b>Black</b> — say this</span>
+        <span class="ctxk"><span class="sw"></span><b>Blue</b> — backing context, don't read aloud</span>
+      </div>
+    </header>
+
+    <aside class="callout">
+      <p><strong>Pick the player's position in the bar below.</strong> The scene and the two options rewrite themselves to match. Everything else — permission, kit, check-ins, the payoff, the control question and the whole debrief — is identical for every position.</p>
+    </aside>
+
+    <div class="posbar">
+      <p class="barlabel" id="poslabel">Player's position</p>
+      <div class="postabs" role="tablist" aria-labelledby="poslabel">
+        <button class="postab" role="tab" type="button" data-pos="mid" aria-selected="true">Central midfielder (6/8)</button>
+        <button class="postab" role="tab" type="button" data-pos="cb" aria-selected="false">Centre back</button>
+        <button class="postab" role="tab" type="button" data-pos="winger" aria-selected="false">Winger</button>
+        <button class="postab" role="tab" type="button" data-pos="striker" aria-selected="false">Striker (9)</button>
+        <button class="postab" role="tab" type="button" data-pos="fb" aria-selected="false">Fullback / outside back</button>
+        <button class="postab" role="tab" type="button" data-pos="gk" aria-selected="false">Goalkeeper</button>
+      </div>
+    </div>
+
+    <h2 id="step-by-step">Step-by-step breakdown</h2>
+
+    <h3 id="part-1">Part 1 — The visualisation exercise</h3>
+    <ol class="steps">
+
+      <li>
+        <span class="steplabel">Ask permission</span>
+        <p>"I wanna give you an example of how it works. That'd be okay?" / "Would love to show you how it works if you would be open to it."</p>
+        <ul>
+          <li class="ctx-block">Optional confidence prime: <span style="color:var(--ink)">"Take a little bit of bravery on your part, but I think you're gonna do great. I know you're smart — you know how I know you're smart? Because they kept moving you back to positions that require you to be smarter."</span></li>
+        </ul>
+      </li>
+
+      <li>
+        <span class="steplabel">Set the scene with their real details<span class="vartag" data-vartag>Central midfielder</span></span>
+
+        <ul>
+          <li><strong class="ctx">Position:</strong> "Is that a normal position for you to play?"</li>
+          <li><strong class="ctx">Kit:</strong> "What do you wear for your coloured jerseys?"
+            <ul><li>"So you're in black and the opponent is in white — it'll just make it easy for us to visualise."</li></ul>
+          </li>
+        </ul>
+
+        <div class="variant" data-var="mid">
+          <ul>
+            <li><strong class="ctx">Framing:</strong> "You've played midfielder, right? Centre mid? … imagine you're playing the six."</li>
+            <li><strong class="ctx">Field orientation:</strong> "I want you to imagine that you are facing in toward the middle of the field, about a third of the way up. Your centre back is just above the D. The goal you're defending is to your right, the opponent's goal is to your left."</li>
+            <li><strong class="ctx">The incoming pass:</strong> "The centre back receives the ball, she takes a touch towards you, and now she's gonna pass the ball forward to you."</li>
+            <li><strong class="ctx">The receiving touch:</strong> "You're gonna take a quick check and you see there's a little bit of space — the next defender is at least three, four yards away. So you're gonna let the ball go across your body onto your left foot, because that's your upfield foot, and now you're gonna be turning and facing forward."</li>
+          </ul>
+        </div>
+
+        <div class="variant" data-var="cb" hidden>
+          <ul>
+            <li><strong class="ctx">Scene:</strong> "Imagine your goalkeeper has the ball at their feet, just outside the 18. You're the left centre back, and you've dropped wide, about level with the corner of the box, to receive. Their striker — the 9 — is about ten yards away and starting to move toward you."</li>
+            <li><strong class="ctx">The delivery:</strong> "Your keeper plays it into your feet."</li>
+          </ul>
+        </div>
+
+        <div class="variant" data-var="winger" hidden>
+          <ul>
+            <li><strong class="ctx">Scene:</strong> "Imagine you're playing on the right wing, high and wide, hugging the touchline. Your midfielder has the ball in the middle of the field and plays it out to you. You've got a bit of space, so you receive it facing forward — facing the opponent's goal. Their fullback is three, four yards off you, closing you down."</li>
+          </ul>
+        </div>
+
+        <div class="variant" data-var="striker" hidden>
+          <ul>
+            <li><strong class="ctx">Scene:</strong> "Imagine you're playing as the 9. Your midfielder is driving forward with the ball, and you check toward them to receive it into your feet with your back to goal. Their centre back is tight on your back — you can feel them there."</li>
+          </ul>
+        </div>
+
+        <div class="variant" data-var="fb" hidden>
+          <ul>
+            <li><strong class="ctx">Scene:</strong> "Imagine you're playing right back. Your centre back has the ball and plays it across to you. Their winger is running at you to press, and your winger is ahead of you, up the line."</li>
+          </ul>
+        </div>
+
+        <div class="variant" data-var="gk" hidden>
+          <ul>
+            <li><strong class="ctx">Scene:</strong> "Imagine you've just caught a cross and you've got the ball in your hands. Their striker is jogging toward you to close you down. Your fullback is wide on the right, and your 6 is showing underneath in the middle."</li>
+          </ul>
+        </div>
+      </li>
+
+      <li>
+        <span class="steplabel">Check in <span class="ctx" style="font-weight:400">(use throughout — never advance until they confirm)</span></span>
+        <p>"With me so far?" · "Are you able to picture this in your mind?" · "Do you feel like you can see this in your mind?"</p>
+      </li>
+
+      <li>
+        <span class="steplabel">Option 1 — the predictable play<span class="vartag" data-vartag>Central midfielder</span></span>
+
+        <div class="variant" data-var="mid">
+          <ul>
+            <li>"As you start to receive that ball and face forward, what do you expect the defender (about four yards away) to do?"</li>
+            <li>"Imagine you see a passing option on either your left or your right — where do you see it?"</li>
+            <li>"If you take your touch toward the right and begin to pass, what's her reaction gonna be?"
+              <ul><li>"Step in and try to close that space?"</li></ul>
+            </li>
+            <li><strong class="ctx">Name the problem:</strong> "That's gonna make the pass more difficult — the space gets smaller."</li>
+          </ul>
+        </div>
+
+        <div class="variant" data-var="cb" hidden>
+          <ul>
+            <li>"As it arrives, you open up toward the sideline like you're gonna play down the line. What's that 9 gonna do?"</li>
+            <li class="ctx-block">Expect: presses your outside shoulder and shows you down the line — your forward options narrow.</li>
+          </ul>
+        </div>
+
+        <div class="variant" data-var="winger" hidden>
+          <ul>
+            <li>"If you push your touch straight down the line, what's that fullback gonna do?"</li>
+            <li class="ctx-block">Expect: shows you to the touchline — the lane down the line gets smaller.</li>
+          </ul>
+        </div>
+
+        <div class="variant" data-var="striker" hidden>
+          <ul>
+            <li>"If you receive it and just lay it straight back to your midfielder, what does that centre back do?"</li>
+            <li class="ctx-block">Expect: stays touch-tight — safe, but you never turn, never threaten.</li>
+          </ul>
+        </div>
+
+        <div class="variant" data-var="fb" hidden>
+          <ul>
+            <li>"If you open up and get ready to play the obvious pass down the line, what does their winger do?"</li>
+            <li class="ctx-block">Expect: angles the press to cut off the line — the lane closes.</li>
+          </ul>
+        </div>
+
+        <div class="variant" data-var="gk" hidden>
+          <ul>
+            <li>"If you look straight at your fullback and wind up to throw it there, what does the striker's run do?"</li>
+            <li class="ctx-block">Expect: bends to cut off that lane — the throw gets riskier the longer you wait.</li>
+          </ul>
+        </div>
+      </li>
+
+      <li>
+        <span class="steplabel">Rewind → Option 2 — the deception<span class="vartag" data-vartag>Central midfielder</span></span>
+
+        <div class="variant" data-var="mid">
+          <ul>
+            <li>"Let's rewind the tape in your head. Ball comes forward, you're receiving — just like before."</li>
+            <li>"But now imagine you let the ball run across your body and you drop your shoulder as if you're gonna dribble."
+              <ul><li>"Do you do many feints like that in the game?"</li></ul>
+            </li>
+            <li>"What do you think the defender will do differently in that circumstance?"</li>
+          </ul>
+        </div>
+
+        <div class="variant" data-var="cb" hidden>
+          <ul>
+            <li>"Rewind. Same ball. This time you turn your hips inside and open your body like you're gonna pass across to your other centre back. Now what does the 9 do?"</li>
+            <li class="ctx-block">Expect: turns in toward that pass — and the middle opens for you to step into.</li>
+          </ul>
+        </div>
+
+        <div class="variant" data-var="winger" hidden>
+          <ul>
+            <li>"Rewind. This time, as they get close, you swing your hips like you're gonna pass back inside to your midfielder. What do they do now?"</li>
+            <li class="ctx-block">Expect: jumps toward the inside pass — and the line opens up for you to attack.</li>
+          </ul>
+        </div>
+
+        <div class="variant" data-var="striker" hidden>
+          <ul>
+            <li>"Rewind. Same ball. This time you shape your body like you're gonna lay it off again — but instead you let it run across your body and spin off their blind side. What does the centre back do when you show them the layoff?"</li>
+            <li class="ctx-block">Expect: steps forward to squeeze it — and space opens behind them for your turn.</li>
+          </ul>
+        </div>
+
+        <div class="variant" data-var="fb" hidden>
+          <ul>
+            <li>"Rewind. This time you open your hips like you're playing down the line — and then chop it inside toward your 6. What happens to the player pressing you?"</li>
+            <li class="ctx-block">Expect: overruns toward the line — and the inside lane opens.</li>
+          </ul>
+        </div>
+
+        <div class="variant" data-var="gk" hidden>
+          <ul>
+            <li>"Rewind. This time you keep your eyes on the fullback and shape like you're throwing there — as the striker's run bends that way, who's now open underneath?"</li>
+            <li class="ctx-block">Expect: the 6 — you moved the presser with your eyes and your shape, without touching the ball.</li>
+          </ul>
+        </div>
+      </li>
+
+      <li>
+        <span class="steplabel">Space recognition</span>
+        <div class="variant" data-var="mid">
+          <ul>
+            <li>"When she goes to the left as you drop your shoulder, where is new space being created for you?"</li>
+            <li>"And what's on the right — remind me?"</li>
+            <li>"Can you easily chop it back to the inside? And now who can you easily pass to?"</li>
+          </ul>
+        </div>
+        <p class="ctx-block" data-notmid hidden>Three beats, in this position's language: where has the new space opened, what did they place there earlier ("remind me?"), and can they get to it. Scripted word-for-word for the midfielder only — say it in the language of the scene above.</p>
+        <ul>
+          <li><strong class="ctx">Payoff (same for every position):</strong> "So where's the space now? And who created it?"</li>
+        </ul>
+      </li>
+
+      <li>
+        <span class="steplabel">Control question &amp; principle</span>
+        <ul>
+          <li>"So now in this moment, who is in control of what's happening here?" → "You're the actor. He's the reactor."</li>
+          <li class="ctx-block">State the principle: you had information he didn't (asymmetry), so you could manipulate his movement with something as simple as a shoulder drop.</li>
+          <li class="ctx-block variant" data-var="gk" hidden>GK-only principle (keep this one — it's position-specific): <span style="color:var(--ink)">"Your look was the feint — same rule as everywhere else on the field."</span></li>
+        </ul>
+      </li>
+    </ol>
+
+    <h3 id="part-2">Part 2 — The debrief</h3>
+    <ol class="steps">
+      <li>
+        <span class="steplabel">Clarity check</span>
+        <p>"When we were going through this example, was it very easy for you to picture in your mind what was going on?" / "Were you able to paint that picture in your head?"</p>
+      </li>
+      <li>
+        <span class="steplabel">Real-field anchor</span>
+        <p>"Quick question — what field were you on?"</p>
+        <ul><li>"Isn't that funny? It wasn't some random made-up field."</li></ul>
+      </li>
+      <li>
+        <span class="steplabel">Friction probe</span>
+        <p>"So what was easy about it? What was hard?"</p>
+      </li>
+      <li>
+        <span class="steplabel">Agency reveal</span>
+        <p>"While we were talking, who was deciding what happens next? Was it me, or was it you?"</p>
+        <ul>
+          <li class="ctx-block">If they say "you": <span style="color:var(--ink)">"Was I? Think back — did I tell you, or did I ask you what was going to happen?"</span></li>
+          <li>"Your brain had to solve those problems — and they're not complicated, are they?"</li>
+        </ul>
+      </li>
+      <li>
+        <span class="steplabel">Motor imagery reveal</span>
+        <p>"Have you ever heard of something called motor imagery?" → "Would you be surprised to know that your motor cortex — the part of your brain that controls muscle movement — was actually performing those actions while we talked about it?"</p>
+        <ul><li>"It's pretty trippy — and almost everyone is surprised by it if they didn't already know that's what's happening. I encourage you to look it up."</li></ul>
+      </li>
+      <li>
+        <span class="steplabel">Bridge to the program</span>
+        <p class="ctx-block">In the real program this is done with <strong>the player's own game footage</strong> — "hundreds of repetitions" of a game moment in ~45 minutes — plus the results promise: <span style="color:var(--ink)">"players improve 20-30% faster than their teammates… you'll notice a difference within the first couple of weeks."</span></p>
+      </li>
+      <li>
+        <span class="steplabel">Transition to close</span>
+        <ul>
+          <li class="ctx-block">Value/impact checks:
+            <ul>
+              <li>"What do you think of that?"</li>
+              <li>"How do you feel about that? You feel like that's something that would be impactful in your game?"</li>
+              <li>"Do you think that would help you deal with those kinds of moments better in real live games — being able to work out how to solve them in practice like this?"</li>
+              <li>"So how pumped are you about this helping you [play with more confidence / do XYZ in your game]?"</li>
+            </ul>
+          </li>
+          <li><strong class="ctx">Micro-commitment:</strong> "It's about 30-45 minutes a week of video work — is that something you'll be able to do?"</li>
+          <li>"Do you have any questions for me on how this would work for you?"</li>
+          <li><strong class="ctx">Handoff:</strong> "Do you want me to chat with your mom a little bit and talk about what the next step is?"</li>
+        </ul>
+      </li>
+    </ol>
+
+    <h2 id="example-maddie">Example Flow 1 — Maddie (13-year-old midfielder/centre back)</h2>
+    <p class="ctx-block">Source: recorded call — exercise 09:07–13:15, debrief 13:15–17:30. Condensed but verbatim.</p>
+
+    <p class="subhd">Setup &amp; scene (V1–V3)</p>
+    <div class="dlg">
+      <p class="coach"><span class="who">Coach:</span> So let me give you an example of how our framework works, if that's okay. Take a little bit of bravery on your part, but I think you're gonna do great. I know you're smart — you know how I know you're smart? Because they kept moving you back to positions that require you to be smarter… Just imagine for a second that you are playing as a central midfielder. What do you wear for your coloured jerseys?</p>
+      <p class="player ctx-block"><span class="who">Maddie:</span> We have light blue, white, and then black.</p>
+      <p class="coach"><span class="who">Coach:</span> So just imagine that you're wearing your black jerseys, and the opponent is wearing white — that way we can create sort of a visual… The centre back on the left-hand side receives the ball, she takes a touch towards you, and now she's gonna pass the ball forward to you. Are you able to picture this in your mind?</p>
+      <p class="player ctx-block"><span class="who">Maddie:</span> Yeah.</p>
+      <p class="coach"><span class="who">Coach:</span> You're gonna take a quick check and you see there's a little bit of space — the next defender is at least three, four yards away. So you're gonna let the ball go across your body onto your left foot, because that's your upfield foot, and now you're gonna be turning and facing forward. Do you feel like you can see this in your mind?</p>
+      <p class="player ctx-block"><span class="who">Maddie:</span> Yeah.</p>
+    </div>
+
+    <p class="subhd">Option 1 — the predictable play (V4)</p>
+    <div class="dlg">
+      <p class="coach"><span class="who">Coach:</span> As you start to receive that ball and face forward, what do you expect the girl in white — about four yards away from you right now — to do once you turn and face forward?</p>
+      <p class="player ctx-block"><span class="who">Maddie:</span> I'm not sure.</p>
+      <p class="coach"><span class="who">Coach:</span> <span class="ctx">(narrowing to a yes/no)</span> You think she might pressure you? You think she might start to step forward to pressure you?</p>
+      <p class="player ctx-block"><span class="who">Maddie:</span> Oh, yeah. She would start to pressure me.</p>
+      <p class="coach"><span class="who">Coach:</span> In your mind's eye, I want you to imagine there is a passing option either on your left or on your right — tell me where you see that passing option.</p>
+      <p class="player ctx-block"><span class="who">Maddie:</span> I see it, like, on the side, like, on a wing… my right side.</p>
+      <p class="coach"><span class="who">Coach:</span> So what happens then, as she's pressuring you, if you take your touch with your left foot toward the right and you begin to pass? What's her reaction gonna be?</p>
+      <p class="player ctx-block"><span class="who">Maddie:</span> She'd shift to the right.</p>
+      <p class="coach"><span class="who">Coach:</span> Step in and try to close that space?</p>
+      <p class="player ctx-block"><span class="who">Maddie:</span> Yeah.</p>
+      <p class="coach"><span class="who">Coach:</span> Perfect. So that's gonna make the pass a little bit more difficult, right? The space is gonna get smaller.</p>
+    </div>
+
+    <p class="subhd">Option 2 — rewind &amp; deception (V5–V6)</p>
+    <div class="dlg">
+      <p class="coach"><span class="who">Coach:</span> Let's reset this. Let's rewind. Centre back has the ball, she plays it to you, it's running across your body… but now just imagine you let the ball roll a little bit farther — have you ever done in a game like a feint, where you drop your shoulder as if you're gonna dribble?</p>
+      <p class="player ctx-block"><span class="who">Maddie:</span> Kind of. I feel like something that I struggle with in games is doing moves. Like, I'll practice them, but I just can't perform in games.</p>
+      <p class="coach"><span class="who">Coach:</span> <span class="ctx">(affirm the pain, promise, continue)</span> Yeah — that's one of my favourite things to help with. We're gonna do so great with that… and this example is gonna help you understand it. As the ball is going across your body and you drop your shoulder to go to the left, what do you think she might do differently compared to the other example?</p>
+      <p class="player ctx-block"><span class="who">Maddie:</span> She would try to cut off the space to the left.</p>
+      <p class="coach"><span class="who">Coach:</span> Right. When she goes to the left as you drop your shoulder, where is new space being created for you?</p>
+      <p class="player ctx-block"><span class="who">Maddie:</span> The right.</p>
+      <p class="coach"><span class="who">Coach:</span> And what's on the right? Remind me.</p>
+      <p class="player ctx-block"><span class="who">Maddie:</span> The goal.</p>
+      <p class="coach"><span class="who">Coach:</span> The player you wanted to pass to is there. Yes?</p>
+      <p class="player ctx-block"><span class="who">Maddie:</span> Yeah.</p>
+      <p class="coach"><span class="who">Coach:</span> <span class="ctx">(principle)</span> So in this scenario, you knew you wanted to go to the right, but by initially taking that movement to the left, you were actually able to control — we say manipulate — the movement of the defender and create the space you wanted in the first place.</p>
+    </div>
+
+    <p class="subhd">Debrief (D1–D6)</p>
+    <div class="dlg">
+      <p class="coach"><span class="who">Coach:</span> I wanna ask you some questions about what we just did. When we were going through this example, was it very easy for you to picture in your mind what was going on?</p>
+      <p class="player ctx-block"><span class="who">Maddie:</span> I feel like it was easy and hard at the same time.</p>
+      <p class="coach"><span class="who">Coach:</span> Quick question — what field were you on?</p>
+      <p class="player ctx-block"><span class="who">Maddie:</span> What field was I on? … I was at, like, the field that I practice at.</p>
+      <p class="coach"><span class="who">Coach:</span> Isn't that funny? It wasn't just some random made-up field — it was an actual field that you practice at. So what was easy about it? What was hard?</p>
+      <p class="player ctx-block"><span class="who">Maddie:</span> It was easy to understand how I'm receiving the ball, but it was harder to tell where the goals are and which way I should be turning — looking for the pass.</p>
+      <p class="coach"><span class="who">Coach:</span> It's very easy to visualise in your mind if you have the right structure for visualising. The second thing I wanna ask: while we were talking, who was deciding what happens next? Was it me, or was it you?</p>
+      <p class="player ctx-block"><span class="who">Maddie:</span> I got to choose which way to pass the ball… I feel like it was more me.</p>
+      <p class="coach"><span class="who">Coach:</span> Yeah — because really, all I did was ask you questions. This is something called <strong>experiential learning</strong>: when you get to experience it, those neural pathways are built much more quickly and they're much stronger… But what I think is really cool: how many things in your soccer life are 100% about you, 100% of the time?</p>
+      <p class="player ctx-block"><span class="who">Maddie:</span> It's never just about me — I can be out of position, or I go help and then my position is open… it's very much a team thing.</p>
+      <p class="coach"><span class="who">Coach:</span> I haven't even told you the coolest part yet. Are you ready? What we just did is a form of what is called <strong>motor imagery</strong>… would you be surprised to know that your motor cortex, the part of your brain that controls muscle movement, was actually performing those actions while we talked about it?</p>
+      <p class="player ctx-block"><span class="who">Maddie:</span> <span class="ctx">(laughing)</span> Yeah!</p>
+      <p class="coach"><span class="who">Coach:</span> It's pretty trippy. Almost everyone gets the same reaction… I encourage you to look it up. We use your actual game moments, your decisions in games, so your brain gets to practice this moment over and over and over… players that do our program improve about 20-30% faster than their teammates, and you will notice a difference within the first couple of weeks.</p>
+    </div>
+    <p class="ctx-block"><strong>Transition:</strong> the call then moves to <span style="color:var(--ink)">"What do you think of this, Maddie?"</span> → the 1-10 readiness scale with Maddie, then with mom.</p>
+
+    <h2 id="example-aiden">Example Flow 2 — Aiden (2013 defender/midfielder, dad Josh on the call)</h2>
+    <p class="ctx-block">Source: recorded call — exercise 05:07–10:05, debrief 10:05–12:17. Condensed but verbatim.</p>
+
+    <p class="subhd">Setup &amp; scene (V1–V3)</p>
+    <div class="dlg">
+      <p class="coach"><span class="who">Coach:</span> Would love to show you how it works if you would be open to it.</p>
+      <p class="player ctx-block"><span class="who">Aiden:</span> Yeah. Definitely.</p>
+      <p class="coach"><span class="who">Coach:</span> So you've played midfielder, right? Centre mid? I'm gonna talk you through an example where we're gonna imagine you're playing the six. You good with that? … What colour does your team usually wear?</p>
+      <p class="player ctx-block"><span class="who">Aiden:</span> Red, usually.</p>
+      <p class="coach"><span class="who">Coach:</span> So we're gonna say you're in red and the opponent is in white — it'll just make it easy for us to visualise. I want you to imagine that you are facing in toward the middle of the field, about a third of the way up. Your centre back is just above the D. The goal you're defending is to your right, the opponent's goal is to your left. With me so far?</p>
+      <p class="player ctx-block"><span class="who">Aiden:</span> Yep.</p>
+      <p class="coach"><span class="who">Coach:</span> He's gonna play you the ball forward. And because you checked your shoulder and you see there's a little bit of space, you're gonna let that ball go across your body — you wanna take it on your upfield foot, which in this case is your left foot. Right?</p>
+      <p class="player ctx-block"><span class="who">Aiden:</span> Yep.</p>
+    </div>
+
+    <p class="subhd">Option 1 — the predictable play (V4)</p>
+    <div class="dlg">
+      <p class="coach"><span class="who">Coach:</span> As you're turning, you're gonna notice that defender is probably going to be doing what? What do you expect he will probably do?</p>
+      <p class="player ctx-block"><span class="who">Aiden:</span> Probably step, most likely.</p>
+      <p class="coach"><span class="who">Coach:</span> Might wanna apply some pressure… So now your job is to solve that pressure. You could just turn and play negative — super easy — but we would be going backwards instead of forwards. And we wanna go forward. Why do we wanna go forward?</p>
+      <p class="player ctx-block"><span class="who">Aiden:</span> Because it progresses the play… the goal.</p>
+      <p class="coach"><span class="who">Coach:</span> Because that's where the goal is. Game's super simple… Now I want you to imagine that in your mind's eye you see an option to pass on either your right or your left. Tell me what you're seeing in your mind's eye right now?</p>
+      <p class="player ctx-block"><span class="who">Aiden:</span> Right now I'm seeing, like, one or two wingers making a run.</p>
+      <p class="coach"><span class="who">Coach:</span> Which side are you seeing the passing option on?</p>
+      <p class="player ctx-block"><span class="who">Aiden:</span> The right.</p>
+      <p class="coach"><span class="who">Coach:</span> As you turn and open your right hip to play that pass to the guy on your right, what do you think that opponent — the one applying pressure — is going to do differently?</p>
+      <p class="player ctx-block"><span class="who">Aiden:</span> Well, he's gonna adjust his body position, right?</p>
+      <p class="coach"><span class="who">Coach:</span> Yeah — is he gonna step into that passing lane and try to take that pass away?</p>
+      <p class="player ctx-block"><span class="who">Aiden:</span> Yes… I mean, maybe.</p>
+      <p class="coach"><span class="who">Coach:</span> He's definitely going to adjust his run based on you turning your hips. Perfect — that's all we need to know.</p>
+    </div>
+
+    <p class="subhd">Option 2 — rewind &amp; deception (V5–V6)</p>
+    <div class="dlg">
+      <p class="coach"><span class="who">Coach:</span> So let's just reset now. Centre back has the ball, he plays forward, you're turning, the ball's coming across towards your left foot. You see the teammate on the right still. But your opponent has his back to that player — he doesn't know where that player is. True?</p>
+      <p class="player ctx-block"><span class="who">Aiden:</span> Mhmm.</p>
+      <p class="coach"><span class="who">Coach:</span> So imagine that instead of taking the ball to your right, you let it go across your body to your left, and you just sort of drop your shoulder going forward like you're gonna dribble. What do you think the opponent will do differently in that circumstance?</p>
+      <p class="player ctx-block"><span class="who">Aiden:</span> Well, he would step to the left, right? But I have a feeling we'd go to the right.</p>
+      <p class="coach"><span class="who">Coach:</span> When he steps to the left, where is the space being created?</p>
+      <p class="player ctx-block"><span class="who">Aiden:</span> On the right side.</p>
+      <p class="coach"><span class="who">Coach:</span> Right. He doesn't know you wanna pass to the right — he doesn't even know there's nobody to pass to on the left. He's reacting to what you're doing. So now in this moment, who is in control of what's happening here?</p>
+      <p class="player ctx-block"><span class="who">Aiden:</span> Me.</p>
+      <p class="coach"><span class="who">Coach:</span> <span class="ctx">(principle)</span> Yeah. You're the actor, he's the reactor — simple as that… You created that space because of your action. You recognised the only three things that mattered: you have the ball, he's that distance away applying pressure, and you know where the release is. And all we did was drop our shoulder.</p>
+    </div>
+
+    <p class="subhd">Debrief (D1–D6)</p>
+    <div class="dlg">
+      <p class="coach"><span class="who">Coach:</span> A couple of interesting things about this little scenario, and I wanna get your feedback. Number one — were you able to very clearly see what's going on? Were you able to paint that picture in your head?</p>
+      <p class="player ctx-block"><span class="who">Aiden:</span> Yeah, I saw it pretty good.</p>
+      <p class="coach"><span class="who">Coach:</span> Which is cool. But also, you were the one involved — it's what we call experiential learning. Because as we were talking, who was making most of the decisions about what was gonna happen in that scenario? Was it me, or was it you?</p>
+      <p class="player ctx-block"><span class="who">Aiden:</span> It was you. You were telling me what I was gonna do, right?</p>
+      <p class="coach"><span class="who">Coach:</span> Was I?</p>
+      <p class="player ctx-block"><span class="who">Aiden:</span> I mean, I did it in my head…</p>
+      <p class="coach"><span class="who">Coach:</span> No, no — think back. Did I tell you, or did I ask you what was going to happen?</p>
+      <p class="player ctx-block"><span class="who">Aiden:</span> You did ask me what was gonna happen.</p>
+      <p class="coach"><span class="who">Coach:</span> A lot of times, right? "What would happen if?" "What do you think you would do if?" So here's the really amazing part: your brain had to solve those problems. And they're not complicated, are they?</p>
+      <p class="player ctx-block"><span class="who">Aiden:</span> No.</p>
+      <p class="coach"><span class="who">Coach:</span> But in the game you don't generally solve those problems, because you have so many other things going on in your head… Here's the thing I haven't told you yet, and this is gonna blow your mind. The part of your brain that controls motor activity on the field — the motor cortex — was fully activated. It literally does the motions as if you're on the field.</p>
+      <p class="player ctx-block"><span class="who">Aiden:</span> It's cool.</p>
+      <p class="coach"><span class="who">Coach:</span> Everybody giggles when I tell them that… But even better — we're not watching somebody else play, are we? We're watching <em>you</em> play. It's about you 100% of the time, and it's probably one of the only things in your soccer life that will be about you 100% of the time.</p>
+      <p class="coach"><span class="who">Coach:</span> You seem excited.</p>
+      <p class="player ctx-block"><span class="who">Aiden:</span> Yeah — I wanna get faster at playing and stuff.</p>
+      <p class="coach"><span class="who">Coach:</span> Well, you will… You're gonna start noticing differences in just a few weeks. You're gonna be a little irritated, thinking: this seems so easy — why did nobody teach this to me until I was 13 years old?</p>
+    </div>
+    <p class="ctx-block"><strong>Transition:</strong> <span style="color:var(--ink)">"I do wanna ask if you have any other questions…"</span> → program logistics with Aiden → <span style="color:var(--ink)">"Josh, what do you think?"</span> → close with dad.</p>
+
+    <h2 id="question-explainer">Question explainer &amp; categories</h2>
+
+    <h3 id="q-exercise">Visualisation exercise questions</h3>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Category</th><th>Example questions</th><th>What it does / how it links forward</th></tr></thead>
+        <tbody>
+          <tr><td>Permission openers</td><td>"That'd be okay?" · "Would you be open to it?"</td><td>Gets explicit buy-in and hands the player agency from second one — which the agency reveal (D4) later depends on.</td></tr>
+          <tr><td>Personalisation anchors</td><td>"Is that a normal position for you to play?" · "What colour does your team usually wear?"</td><td>Pulls real details into the scene so the player's brain builds it from memory. Sets up the "what field were you on?" reveal (D2).</td></tr>
+          <tr><td>Comprehension check-ins</td><td>"With me so far?" · "Are you able to picture this in your mind?" · "Do you feel like you can see this in your mind?"</td><td>Pacing gates — never advance until the image is confirmed. Also collects the evidence for the clarity check (D1).</td></tr>
+          <tr><td>Prediction questions</td><td>"What do you expect the defender to do once you turn and face forward?" · "What do you think his response will be?"</td><td>The first real decision handed to the player. Teaches reading an opponent's intent; every answer becomes a building block the rep never has to assert.</td></tr>
+          <tr><td>Option identification</td><td>"Where do you see that passing option — your left or your right?" · "Tell me what you're seeing in your mind's eye right now?"</td><td>The player authors the scene detail the entire payoff depends on. Because they placed the teammate, discovering the space later feels like their own insight.</td></tr>
+          <tr><td>Consequence questions (Option 1)</td><td>"If you take your touch toward the right and begin to pass, what's her reaction gonna be?" · "Is he gonna step into that passing lane?"</td><td>Establishes the problem: the obvious pass telegraphs intent and shrinks the space. Creates the tension Option 2 resolves.</td></tr>
+          <tr><td>Deception setup (Option 2)</td><td>"Have you ever done a feint — where you drop your shoulder as if you're gonna dribble?" · "What do you think she'll do differently in that circumstance?"</td><td>Rewinds the tape and swaps one action. The player predicts the defender biting — authoring the deception mechanic themselves.</td></tr>
+          <tr><td>Space recognition</td><td>"Where is new space being created for you?" · "And what's on the right — remind me?" · "Now who can you easily pass to?"</td><td>The payoff. "Remind me" forces the player to retrieve the detail they placed earlier, so the solution lands as self-discovered.</td></tr>
+          <tr><td>Control question</td><td>"So now in this moment, who is in control of what's happening here?"</td><td>Lands the principle — actor vs. reactor, information asymmetry — as the player's own conclusion. The rep only names what the player already answered.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 id="q-debrief">Debrief questions</h3>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Category</th><th>Example questions</th><th>What it does / how it links forward</th></tr></thead>
+        <tbody>
+          <tr><td>Clarity check</td><td>"Was it very easy for you to picture in your mind what was going on?" · "Were you able to paint that picture in your head?"</td><td>Confirms the mechanism worked and opens the debrief. Almost always a yes — evidence the program will work for this player.</td></tr>
+          <tr><td>Real-field anchor</td><td>"Quick question — what field were you on?"</td><td>The player catches their own brain using a real memory ("the field I practice at"). Makes visualisation concrete, not woo.</td></tr>
+          <tr><td>Friction probe</td><td>"What was easy about it? What was hard?"</td><td>Surfaces exactly what coaching will fix and feeds the personalised pitch. Also demonstrates listening.</td></tr>
+          <tr><td>Agency reveal</td><td>"Who was deciding what happens next — was it me, or was it you?" · "Did I tell you, or did I ask you what was going to happen?"</td><td>The biggest aha. If the player says "you," the rep pushes back gently until they realise they made every decision. Labelled as experiential learning.</td></tr>
+          <tr><td>Simplicity anchor</td><td>"Your brain had to solve those problems — and they're not complicated, are they?"</td><td>Reframes the skill as accessible: the game context is the barrier, not the player's intelligence.</td></tr>
+          <tr><td>Motor imagery reveal</td><td>"Have you ever heard of something called motor imagery?" · "Would you be surprised to know your motor cortex was actually performing those actions?"</td><td>The wow moment. Scientific legitimacy for video-based coaching; reframes the exercise as actual training. Rep normalises the giggle reaction.</td></tr>
+          <tr><td>"100% about you" anchor</td><td>"How many things in your soccer life are 100% about you, 100% of the time?"</td><td>Emotional differentiator — players can never name one. Positions the program as the only development investment entirely about the player (lands with the parent too).</td></tr>
+          <tr><td>Feedback &amp; temperature</td><td>"What do you think of that?" · "You seem excited." · "Do you have any questions for me?"</td><td>Collects positive affirmation out loud (with the parent listening) to carry momentum into the close.</td></tr>
+          <tr><td>Transition</td><td>"Do you want me to chat with your mom about what the next step is?" · "On a scale of 1-10, where are you right now?"</td><td>Hands the conversation to the buying parent, or measures readiness directly.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 id="delivery-principles">Delivery principles</h2>
+    <p class="ctx-block">Patterns across all three calls.</p>
+    <ul>
+      <li class="ctx-block"><strong>Ask, never tell.</strong> The rep asserts almost nothing during the exercise — every building block (defender pressures, lane closes, space opens, "me") comes out of the player's mouth. The rep only names principles the player has already supplied.</li>
+      <li class="ctx-block"><strong>Narrow when they stall.</strong> If a prediction question gets "I'm not sure" (Maddie) or confusion (Tristan: "Could you elaborate?"), immediately downgrade to a binary or yes/no: <span style="color:var(--ink)">"You think she might pressure you?"</span> · <span style="color:var(--ink)">"Do you see a teammate on your right or on your left?"</span> Never let the player feel wrong.</li>
+      <li class="ctx-block"><strong>Affirm every answer.</strong> "Perfect." "Right." "Great." — after literally every response. Wrong-ish answers get redirected by rewinding, not corrected.</li>
+      <li class="ctx-block"><strong>"Rewind the tape" is the reset mechanic.</strong> Every new option starts with "let's rewind / let's reset" and re-narrates the scene from the same starting frame before changing one variable.</li>
+      <li class="ctx-block"><strong>Use their real details, then reference them back.</strong> Position, kit colour, the teammate <em>they</em> placed — "remind me?" turns their own details into the payoff.</li>
+      <li class="ctx-block"><strong>Treat struggle admissions as gold.</strong> When Maddie admitted she can't perform moves in games, the rep affirmed ("that's one of my favourite things to help with"), promised, and continued the exercise — then had a personalised proof point for the close.</li>
+      <li class="ctx-block"><strong>The parent is always watching.</strong> The exercise doubles as a demo for the buying parent — Rafi texted mid-exercise: <span style="color:var(--ink)">"I could almost watch his brain trying to rewire and think differently in real time."</span> The debrief lines about experiential learning and motor imagery are as much for the parent as the player.</li>
+    </ul>
+
+    <h2 id="overall-summary">Overall summary</h2>
+    <p class="ctx-block">The visualisation exercise is a <strong>Socratic two-option demo</strong>: build a vivid, personalised game scene (their position, their kit, their field), have the player solve it the obvious way and discover the defender kills the space (Option 1), rewind and have them solve it with deception and discover they control the defender (Option 2), then debrief so they realise three things in order — <em>I could see it clearly, I made every decision, and my brain was physically training the whole time.</em> Each stage is driven entirely by questions, so the player experiences the coaching rather than hearing about it; the debrief converts that experience into the program's three core claims (experiential learning, motor imagery, 100%-about-you); and the emotional high it creates flows directly into the temperature check and close. Typical player responses are short, affirmative, and increasingly confident — hesitation early ("I'm not sure") turning into ownership by the end ("Me." / "It was more me.") — and that visible shift is precisely what sells the parent watching.</p>
+
+  </main>
+</div>
+
+<script>
+(function(){
+  var LABELS = {
+    mid:'Central midfielder', cb:'Centre back', winger:'Winger',
+    striker:'Striker (9)', fb:'Fullback / outside back', gk:'Goalkeeper'
+  };
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('.postab'));
+  var variants = Array.prototype.slice.call(document.querySelectorAll('.variant'));
+  var tags = Array.prototype.slice.call(document.querySelectorAll('[data-vartag]'));
+  var notmid = Array.prototype.slice.call(document.querySelectorAll('[data-notmid]'));
+
+  function select(pos){
+    if(!LABELS[pos]) pos = 'mid';
+    tabs.forEach(function(t){ t.setAttribute('aria-selected', String(t.dataset.pos === pos)); });
+    variants.forEach(function(v){ v.hidden = (v.dataset.var !== pos); });
+    tags.forEach(function(t){ t.textContent = LABELS[pos]; });
+    notmid.forEach(function(n){ n.hidden = (pos === 'mid'); });
+    try{ localStorage.setItem('acta-viz-pos', pos); }catch(e){}
+  }
+
+  tabs.forEach(function(t){ t.addEventListener('click', function(){ select(t.dataset.pos); }); });
+
+  var saved = null;
+  try{ saved = localStorage.getItem('acta-viz-pos'); }catch(e){}
+  select(saved || 'mid');
+})();
+</script>
+
+</body>
+</html>
