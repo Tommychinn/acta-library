@@ -266,7 +266,7 @@
     </header>
 
     <aside class="callout">
-      <p><strong>Set the position and their kit colours below and the whole script resolves.</strong> Three things rewrite themselves with the position — the scene in step 2, the question in step 4, the question in step 5 — and every blank that can be filled from what you've entered gets filled in place. Everything else is fixed and never changes, whoever you're talking to.</p>
+      <p><strong>Set the position and the whole script resolves — nothing stays generic.</strong> The scene in step 2 and the two questions in steps 4 and 5 swap to that position, and every bracket in the fixed steps fills with that position's own wording. Kit colours are the only blanks left to fill live; type them in as the player answers.</p>
     </aside>
 
     <div class="posbar">
@@ -407,7 +407,7 @@
 
         <ul>
           <li><strong class="ctx">If they stall, narrow to a yes/no</strong> <span class="fixedtag">Fixed</span> "Step in and try to close that space?"</li>
-          <li><strong class="ctx">Name the problem</strong> <span class="fixedtag">Fixed</span> "That's gonna make the <span data-passthrow>pass</span> more difficult — the space gets smaller."</li>
+          <li><strong class="ctx">Name the problem</strong> <span class="fixedtag">Fixed</span> "That's gonna make the <span class="ph" data-fill="passthrow">[pass/throw]</span> more difficult — the space gets smaller."</li>
         </ul>
       </li>
 
@@ -465,8 +465,8 @@
       <li>
         <span class="steplabel">Space recognition<span class="fixedtag">Fixed</span></span>
         <ul>
-          <li>"When they go <span class="ph">[the way you showed them]</span>, where is new space being created for you?"</li>
-          <li>"And what's over there — remind me?"</li>
+          <li>"When they go <span class="ph" data-fill="showedthem">[the way you showed them]</span>, where is new space being created for you?"</li>
+          <li>"And what's <span class="ph" data-fill="spaceopens">[where the space opens]</span> — remind me?"</li>
           <li><strong class="ctx">Payoff:</strong> "So where's the space now? And who created it?"</li>
         </ul>
       </li>
@@ -719,16 +719,25 @@
 <script>
 (function(){
   var POSITIONS = ['mid','cb','winger','striker','fb','gk'];
-  // How each position is said aloud in the fixed "you've played …" line.
-  var POSNAME = {
-    mid:'central midfielder', cb:'center back', winger:'winger',
-    striker:'striker', fb:'fullback', gk:'goalkeeper'
+  // Every bracketed placeholder in the fixed steps, resolved per position.
+  // Values are the Fill-ins block from each position variant in the source doc —
+  // do not paraphrase them, they are the exact words the rep says.
+  var FILLS = {
+    mid:     { position:'the six',       passthrow:'pass',   showedthem:'to the left, as you drop your shoulder', spaceopens:'on the right' },
+    cb:      { position:'center back',   passthrow:'pass',   showedthem:'toward the switch pass',                 spaceopens:'in the middle' },
+    winger:  { position:'right winger',  passthrow:'pass',   showedthem:'toward the inside pass',                 spaceopens:'down the line' },
+    striker: { position:'the 9',         passthrow:'layoff', showedthem:'forward, to squeeze the layoff',         spaceopens:'behind them' },
+    fb:      { position:'right back',    passthrow:'pass',   showedthem:'toward the line',                        spaceopens:'inside' },
+    gk:      { position:'in goal',       passthrow:'throw',  showedthem:'toward the fullback throw',              spaceopens:'underneath' }
   };
-  var BLANK = { position:'[position]', theircolor:'[their color]', othercolor:'[other color]' };
+  var BLANK = {
+    position:'[position]', passthrow:'[pass/throw]',
+    showedthem:'[the way you showed them]', spaceopens:'[where the space opens]',
+    theircolor:'[their color]', othercolor:'[other color]'
+  };
 
   var tabs = Array.prototype.slice.call(document.querySelectorAll('.postab'));
   var variants = Array.prototype.slice.call(document.querySelectorAll('.variant'));
-  var passthrow = Array.prototype.slice.call(document.querySelectorAll('[data-passthrow]'));
   var fills = Array.prototype.slice.call(document.querySelectorAll('[data-fill]'));
   var theirs = document.getElementById('theircolor');
   var others = document.getElementById('othercolor');
@@ -742,8 +751,13 @@
   // Resolve every blank the page can currently answer. Anything still unknown
   // falls back to its bracketed form so the rep can see it needs filling live.
   function resolve(){
+    var f = FILLS[pos];
     var values = {
-      position: POSNAME[pos],
+      position: f.position,
+      passthrow: f.passthrow,
+      showedthem: f.showedthem,
+      spaceopens: f.spaceopens,
+      // Kit colours are the only blanks the doc leaves to be filled live.
       theircolor: theirs.value.trim(),
       othercolor: others.value.trim()
     };
@@ -759,8 +773,6 @@
     pos = (POSITIONS.indexOf(next) === -1) ? 'mid' : next;
     tabs.forEach(function(t){ t.setAttribute('aria-selected', String(t.dataset.pos === pos)); });
     variants.forEach(function(v){ v.hidden = (v.dataset.var !== pos); });
-    // The keeper has the ball in their hands, so the fixed line reads "throw".
-    passthrow.forEach(function(n){ n.textContent = (pos === 'gk') ? 'throw' : 'pass'; });
     store('acta-viz-pos', pos);
     resolve();
   }
