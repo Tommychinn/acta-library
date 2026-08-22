@@ -208,6 +208,18 @@
   }
   .playerbar .clear:hover{ color:var(--ctx); }
 
+  /* ---- directions: the show / react / exploit map for the selected position ---- */
+  .dirs{
+    border:1px solid var(--rule); border-radius:8px; padding:13px 16px;
+    margin:0 0 26px; background:#FAFBFC;
+  }
+  .dirshd{
+    font-size:10.5px; font-weight:700; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); margin:0 0 6px;
+  }
+  .dirsline{ margin:0; color:var(--ctx); font-size:14.5px; line-height:1.55; }
+  .dirsline strong{ color:var(--ctx); }
+
   /* ---- dialogue transcripts ---- */
   .dlg{ margin:0 0 13px; padding-left:14px; border-left:2px solid var(--rule); }
   .dlg p{ margin:0 0 9px; }
@@ -267,16 +279,20 @@
 
     <aside class="callout">
       <p><strong>Set the position and the whole script resolves — nothing stays generic.</strong> The scene in step 2 and the two questions in steps 4 and 5 swap to that position, and every bracket in the fixed steps fills with that position's own wording. Kit colours are the only blanks left to fill live; type them in as the player answers.</p>
+      <p><strong>Pick the exact side.</strong> Sided positions have a variant per side of the field — never run a winger or a fullback generically. For the central positions (6/8, 9, goalkeeper) the directions are the canonical set; if the player places things on the opposite side, flip every left and right as you go.</p>
     </aside>
 
     <div class="posbar">
       <p class="barlabel" id="poslabel">Player's position</p>
       <div class="postabs" role="tablist" aria-labelledby="poslabel">
         <button class="postab" role="tab" type="button" data-pos="mid" aria-selected="true">Central midfielder (6/8)</button>
-        <button class="postab" role="tab" type="button" data-pos="cb" aria-selected="false">Center back</button>
-        <button class="postab" role="tab" type="button" data-pos="winger" aria-selected="false">Winger</button>
+        <button class="postab" role="tab" type="button" data-pos="lcb" aria-selected="false">Left center back</button>
+        <button class="postab" role="tab" type="button" data-pos="rcb" aria-selected="false">Right center back</button>
+        <button class="postab" role="tab" type="button" data-pos="lw" aria-selected="false">Left winger</button>
+        <button class="postab" role="tab" type="button" data-pos="rw" aria-selected="false">Right winger</button>
+        <button class="postab" role="tab" type="button" data-pos="lb" aria-selected="false">Left back</button>
+        <button class="postab" role="tab" type="button" data-pos="rb" aria-selected="false">Right back</button>
         <button class="postab" role="tab" type="button" data-pos="striker" aria-selected="false">Striker (9)</button>
-        <button class="postab" role="tab" type="button" data-pos="fb" aria-selected="false">Fullback / outside back</button>
         <button class="postab" role="tab" type="button" data-pos="gk" aria-selected="false">Goalkeeper</button>
       </div>
       <div class="playerbar">
@@ -284,6 +300,19 @@
         <label>Opponent kit <input type="text" id="othercolor" autocomplete="off" spellcheck="false" placeholder="white"></label>
         <button class="clear" type="button" id="clearplayer">Clear</button>
       </div>
+    </div>
+
+    <div class="dirs" id="directions">
+      <p class="dirshd">Directions</p>
+      <p class="variant dirsline" data-var="mid">you show = dribble to your <strong>left</strong> (shoulder drop) → defender shifts to your <strong>left</strong> → real action = pass to your <strong>right</strong>, to the teammate the player placed there.</p>
+      <p class="variant dirsline" data-var="lcb" hidden>you show = switch to your <strong>right</strong> (to your right center back) → the 9 turns toward the switch → real action = step forward into the <strong>middle</strong> with the ball.</p>
+      <p class="variant dirsline" data-var="rcb" hidden>you show = switch to your <strong>left</strong> (to your left center back) → the 9 turns toward the switch → real action = step forward into the <strong>middle</strong> with the ball.</p>
+      <p class="variant dirsline" data-var="lw" hidden>you show = inside pass to your <strong>right</strong> (back to your midfielder) → the right back jumps inside → real action = touch past them down the <strong>left line</strong>.</p>
+      <p class="variant dirsline" data-var="rw" hidden>you show = inside pass to your <strong>left</strong> (back to your midfielder) → the left back jumps inside → real action = touch past them down the <strong>right line</strong>.</p>
+      <p class="variant dirsline" data-var="lb" hidden>you show = pass down the <strong>left line</strong> (to your left winger) → the presser overruns to the line → real action = chop inside to your <strong>right</strong>, to your 6.</p>
+      <p class="variant dirsline" data-var="rb" hidden>you show = pass down the <strong>right line</strong> (to your right winger) → the presser overruns to the line → real action = chop inside to your <strong>left</strong>, to your 6.</p>
+      <p class="variant dirsline" data-var="striker" hidden>you show = layoff straight back to your midfielder → the center back steps forward onto your <strong>right</strong> shoulder → real action = let it run to your <strong>left</strong> and spin left, off their blind side.</p>
+      <p class="variant dirsline" data-var="gk" hidden>you show = throw out to your <strong>right</strong> (to your right back) → the striker's run bends to your <strong>right</strong> → real action = release <strong>underneath, in the middle</strong>, to your 6.</p>
     </div>
 
     <h2 id="step-by-step">Step-by-step breakdown</h2>
@@ -319,39 +348,60 @@
               <li>"You're gonna take a quick check and you see there's a little bit of space — the next defender is at least three, four yards away. So you're gonna let the ball go across your body onto your left foot, because that's your upfield foot, and now you're gonna be turning and facing forward."</li>
             </ul>
           </div>
-          <div class="variant" data-var="cb" hidden>
+          <div class="variant" data-var="lcb" hidden>
             <ul class="beats">
-              <li>"Imagine your goalkeeper has the ball at their feet, just outside the 18. You're the left center back, and you've dropped wide, about level with the corner of the box, to receive. Their striker — the 9 — is about ten yards away and starting to move toward you."</li>
+              <li>"Imagine your goalkeeper has the ball at their feet, just outside the 18. You're the left center back, and you've dropped wide to your left, about level with the corner of the box, to receive. Their striker — the 9 — is about ten yards away and starting to move toward you."</li>
               <li><p class="checkcue">check in</p></li>
               <li>"Your keeper plays it into your feet."</li>
             </ul>
           </div>
-          <div class="variant" data-var="winger" hidden>
+          <div class="variant" data-var="rcb" hidden>
             <ul class="beats">
-              <li>"Imagine you're playing on the right wing, high and wide, hugging the touchline."</li>
+              <li>"Imagine your goalkeeper has the ball at their feet, just outside the 18. You're the right center back, and you've dropped wide to your right, about level with the corner of the box, to receive. Their striker — the 9 — is about ten yards away and starting to move toward you."</li>
               <li><p class="checkcue">check in</p></li>
-              <li>"Your midfielder has the ball in the middle of the field and plays it out to you. You've got a bit of space, so you receive it facing forward — facing the opponent's goal. Their fullback is three, four yards off you, closing you down."</li>
+              <li>"Your keeper plays it into your feet."</li>
+            </ul>
+          </div>
+          <div class="variant" data-var="lw" hidden>
+            <ul class="beats">
+              <li>"Imagine you're playing left wing, high and wide, hugging the left touchline."</li>
+              <li><p class="checkcue">check in</p></li>
+              <li>"Your midfielder has the ball in the middle of the field and plays it out to you. You've got a bit of space, so you receive it facing forward — facing the opponent's goal. Their right back is three, four yards off you, closing you down."</li>
+            </ul>
+          </div>
+          <div class="variant" data-var="rw" hidden>
+            <ul class="beats">
+              <li>"Imagine you're playing right wing, high and wide, hugging the right touchline."</li>
+              <li><p class="checkcue">check in</p></li>
+              <li>"Your midfielder has the ball in the middle of the field and plays it out to you. You've got a bit of space, so you receive it facing forward — facing the opponent's goal. Their left back is three, four yards off you, closing you down."</li>
+            </ul>
+          </div>
+          <div class="variant" data-var="lb" hidden>
+            <ul class="beats">
+              <li>"Imagine you're playing left back. Your center back has the ball and plays it across to you, out to the left."</li>
+              <li><p class="checkcue">check in</p></li>
+              <li>"Their right winger is running at you to press, and your left winger is ahead of you, up the left line."</li>
+            </ul>
+          </div>
+          <div class="variant" data-var="rb" hidden>
+            <ul class="beats">
+              <li>"Imagine you're playing right back. Your center back has the ball and plays it across to you, out to the right."</li>
+              <li><p class="checkcue">check in</p></li>
+              <li>"Their left winger is running at you to press, and your right winger is ahead of you, up the right line."</li>
             </ul>
           </div>
           <div class="variant" data-var="striker" hidden>
             <ul class="beats">
               <li>"Imagine you're playing as the 9. Your midfielder is driving forward with the ball, and you check toward them to receive it into your feet with your back to goal."</li>
               <li><p class="checkcue">check in</p></li>
-              <li>"Their center back is tight on your back — you can feel them there."</li>
-            </ul>
-          </div>
-          <div class="variant" data-var="fb" hidden>
-            <ul class="beats">
-              <li>"Imagine you're playing right back. Your center back has the ball and plays it across to you."</li>
-              <li><p class="checkcue">check in</p></li>
-              <li>"Their winger is running at you to press, and your winger is ahead of you, up the line."</li>
+              <li>"Their center back is tight on your back, leaning on your right shoulder — you can feel them there."</li>
             </ul>
           </div>
           <div class="variant" data-var="gk" hidden>
             <ul class="beats">
               <li>"Imagine you've just caught a cross and you've got the ball in your hands."</li>
               <li><p class="checkcue">check in</p></li>
-              <li>"Their striker is jogging toward you to close you down. Your fullback is wide on the right, and your 6 is showing underneath in the middle."</li>
+              <li>"Their striker is jogging toward you to close you down. Your right back is wide on the right, and your 6 is showing underneath in the middle."</li>
             </ul>
           </div>
         </div>
@@ -370,37 +420,55 @@
           <div class="variant" data-var="mid">
             <ul>
               <li>"As you start to receive that ball and face forward, what do you expect the defender (about four yards away) to do?" · "Imagine you see a passing option on either your left or your right — where do you see it?" · "If you take your touch toward the right and begin to pass, what's her reaction gonna be?"</li>
-              <li class="ctx-block">(steps in to close the space — the pass gets more difficult.)</li>
+              <li class="ctx-block">(steps in to their left, toward your right, to close the passing lane — the pass gets more difficult.)</li>
             </ul>
           </div>
-          <div class="variant" data-var="cb" hidden>
+          <div class="variant" data-var="lcb" hidden>
             <ul>
-              <li>"As it arrives, you open up toward the sideline like you're gonna play down the line. What's that 9 gonna do?"</li>
-              <li class="ctx-block">(presses your outside shoulder and shows you down the line — your forward options narrow.)</li>
+              <li>"As it arrives, you open up toward the left sideline like you're gonna play down the left line. What's that 9 gonna do?"</li>
+              <li class="ctx-block">(presses your outside [left] shoulder and shows you down the left line — your forward options narrow.)</li>
             </ul>
           </div>
-          <div class="variant" data-var="winger" hidden>
+          <div class="variant" data-var="rcb" hidden>
             <ul>
-              <li>"If you push your touch straight down the line, what's that fullback gonna do?"</li>
-              <li class="ctx-block">(shows you to the touchline — the lane down the line gets smaller.)</li>
+              <li>"As it arrives, you open up toward the right sideline like you're gonna play down the right line. What's that 9 gonna do?"</li>
+              <li class="ctx-block">(presses your outside [right] shoulder and shows you down the right line — your forward options narrow.)</li>
+            </ul>
+          </div>
+          <div class="variant" data-var="lw" hidden>
+            <ul>
+              <li>"If you push your touch straight down the left line, what's that right back gonna do?"</li>
+              <li class="ctx-block">(shows you to the left touchline — the lane down the line gets smaller.)</li>
+            </ul>
+          </div>
+          <div class="variant" data-var="rw" hidden>
+            <ul>
+              <li>"If you push your touch straight down the right line, what's that left back gonna do?"</li>
+              <li class="ctx-block">(shows you to the right touchline — the lane down the line gets smaller.)</li>
+            </ul>
+          </div>
+          <div class="variant" data-var="lb" hidden>
+            <ul>
+              <li>"If you open up and get ready to play the obvious pass down the left line, what does their winger do?"</li>
+              <li class="ctx-block">(angles the press toward the left touchline to cut off the line — the lane closes.)</li>
+            </ul>
+          </div>
+          <div class="variant" data-var="rb" hidden>
+            <ul>
+              <li>"If you open up and get ready to play the obvious pass down the right line, what does their winger do?"</li>
+              <li class="ctx-block">(angles the press toward the right touchline to cut off the line — the lane closes.)</li>
             </ul>
           </div>
           <div class="variant" data-var="striker" hidden>
             <ul>
               <li>"If you receive it and just lay it straight back to your midfielder, what does that center back do?"</li>
-              <li class="ctx-block">(stays touch-tight — safe, but you never turn, never threaten.)</li>
-            </ul>
-          </div>
-          <div class="variant" data-var="fb" hidden>
-            <ul>
-              <li>"If you open up and get ready to play the obvious pass down the line, what does their winger do?"</li>
-              <li class="ctx-block">(angles the press to cut off the line — the lane closes.)</li>
+              <li class="ctx-block">(stays touch-tight on your back — safe, but you never turn, never threaten.)</li>
             </ul>
           </div>
           <div class="variant" data-var="gk" hidden>
             <ul>
-              <li>"If you look straight at your fullback and wind up to throw it there, what does the striker's run do?"</li>
-              <li class="ctx-block">(bends to cut off that lane — the throw gets riskier the longer you wait.)</li>
+              <li>"If you look straight at your right back and wind up to throw it out to the right, what does the striker's run do?"</li>
+              <li class="ctx-block">(bends to your right to cut off that lane — the throw gets riskier the longer you wait.)</li>
             </ul>
           </div>
         </div>
@@ -421,38 +489,56 @@
           <p class="slothd">Option 2 <span style="font-weight:600;text-transform:none;letter-spacing:0">— swaps with position. Let them predict what the defender does differently.</span></p>
           <div class="variant" data-var="mid">
             <ul>
-              <li>"But now imagine you let the ball run across your body and you drop your shoulder as if you're gonna dribble. What do you think the defender will do differently in that circumstance?"</li>
-              <li class="ctx-block">(bites toward the shoulder drop — and the space you wanted opens on the other side for the easy pass.)</li>
+              <li>"But now imagine you let the ball run across your body onto your left foot and you drop your left shoulder, as if you're gonna dribble to the left. What do you think the defender will do differently in that circumstance?"</li>
+              <li class="ctx-block">(bites to your left, following the shoulder drop — and the space opens back up on your right, where your passing option is.)</li>
             </ul>
           </div>
-          <div class="variant" data-var="cb" hidden>
+          <div class="variant" data-var="lcb" hidden>
             <ul>
-              <li>"Rewind. Same ball. This time you turn your hips inside and open your body like you're gonna pass across to your other center back. Now what does the 9 do?"</li>
-              <li class="ctx-block">(turns in toward that pass — and the middle opens for you to step into.)</li>
+              <li>"Rewind. Same ball. This time you turn your hips in to your right and open your body like you're gonna switch it across to your right center back. Now what does the 9 do?"</li>
+              <li class="ctx-block">(turns in toward that switch — and the middle opens for you to step into.)</li>
             </ul>
           </div>
-          <div class="variant" data-var="winger" hidden>
+          <div class="variant" data-var="rcb" hidden>
             <ul>
-              <li>"Rewind. This time, as they get close, you swing your hips like you're gonna pass back inside to your midfielder. What do they do now?"</li>
-              <li class="ctx-block">(jumps toward the inside pass — and the line opens up for you to attack.)</li>
+              <li>"Rewind. Same ball. This time you turn your hips in to your left and open your body like you're gonna switch it across to your left center back. Now what does the 9 do?"</li>
+              <li class="ctx-block">(turns in toward that switch — and the middle opens for you to step into.)</li>
+            </ul>
+          </div>
+          <div class="variant" data-var="lw" hidden>
+            <ul>
+              <li>"Rewind. This time, as they get close, you swing your hips to your right like you're gonna pass back inside to your midfielder. What do they do now?"</li>
+              <li class="ctx-block">(jumps toward the inside pass, to your right — and the left line opens up for you to attack.)</li>
+            </ul>
+          </div>
+          <div class="variant" data-var="rw" hidden>
+            <ul>
+              <li>"Rewind. This time, as they get close, you swing your hips to your left like you're gonna pass back inside to your midfielder. What do they do now?"</li>
+              <li class="ctx-block">(jumps toward the inside pass, to your left — and the right line opens up for you to attack.)</li>
+            </ul>
+          </div>
+          <div class="variant" data-var="lb" hidden>
+            <ul>
+              <li>"Rewind. This time you open your hips like you're playing down the left line — and then chop it inside, to your right, toward your 6. What happens to the player pressing you?"</li>
+              <li class="ctx-block">(overruns toward the left line — and the inside lane, to your right, opens.)</li>
+            </ul>
+          </div>
+          <div class="variant" data-var="rb" hidden>
+            <ul>
+              <li>"Rewind. This time you open your hips like you're playing down the right line — and then chop it inside, to your left, toward your 6. What happens to the player pressing you?"</li>
+              <li class="ctx-block">(overruns toward the right line — and the inside lane, to your left, opens.)</li>
             </ul>
           </div>
           <div class="variant" data-var="striker" hidden>
             <ul>
-              <li>"Rewind. Same ball. This time you shape your body like you're gonna lay it off again — but instead you let it run across your body and spin off their blind side. What does the center back do when you show them the layoff?"</li>
-              <li class="ctx-block">(steps forward to squeeze it — and space opens behind them for your turn.)</li>
-            </ul>
-          </div>
-          <div class="variant" data-var="fb" hidden>
-            <ul>
-              <li>"Rewind. This time you open your hips like you're playing down the line — and then chop it inside toward your 6. What happens to the player pressing you?"</li>
-              <li class="ctx-block">(overruns toward the line — and the inside lane opens.)</li>
+              <li>"Rewind. Same ball. This time you shape your body like you're gonna lay it off again — but instead you let it run across your body onto your left foot and spin off to your left, over their blind side. What does the center back do when you show them the layoff?"</li>
+              <li class="ctx-block">(steps forward onto your right shoulder to squeeze it — and space opens behind them, on your left, for the turn.)</li>
             </ul>
           </div>
           <div class="variant" data-var="gk" hidden>
             <ul>
-              <li>"Rewind. This time you keep your eyes on the fullback and shape like you're throwing there — as the striker's run bends that way, who's now open underneath?"</li>
-              <li class="ctx-block">(the 6 — you moved the presser with your eyes and your shape, without touching the ball.)</li>
+              <li>"Rewind. This time you keep your eyes on the right back and shape like you're throwing right — as the striker's run bends that way, who's now open underneath?"</li>
+              <li class="ctx-block">(the 6, in the middle — you moved the presser with your eyes and your shape, without touching the ball.)</li>
             </ul>
           </div>
         </div>
@@ -718,17 +804,20 @@
 
 <script>
 (function(){
-  var POSITIONS = ['mid','cb','winger','striker','fb','gk'];
+  var POSITIONS = ['mid','lcb','rcb','lw','rw','lb','rb','striker','gk'];
   // Every bracketed placeholder in the fixed steps, resolved per position.
   // Values are the Fill-ins block from each position variant in the source doc —
   // do not paraphrase them, they are the exact words the rep says.
   var FILLS = {
-    mid:     { position:'the six',       passthrow:'pass',   showedthem:'to the left, as you drop your shoulder', spaceopens:'on the right' },
-    cb:      { position:'center back',   passthrow:'pass',   showedthem:'toward the switch pass',                 spaceopens:'in the middle' },
-    winger:  { position:'right winger',  passthrow:'pass',   showedthem:'toward the inside pass',                 spaceopens:'down the line' },
-    striker: { position:'the 9',         passthrow:'layoff', showedthem:'forward, to squeeze the layoff',         spaceopens:'behind them' },
-    fb:      { position:'right back',    passthrow:'pass',   showedthem:'toward the line',                        spaceopens:'inside' },
-    gk:      { position:'in goal',       passthrow:'throw',  showedthem:'toward the fullback throw',              spaceopens:'underneath' }
+    mid:      { position:"the six",            passthrow:"pass",    showedthem:"to the left, as you drop your shoulder",   spaceopens:"on the right" },
+    lcb:      { position:"left center back",   passthrow:"pass",    showedthem:"in to your right, toward the switch",      spaceopens:"in the middle" },
+    rcb:      { position:"right center back",  passthrow:"pass",    showedthem:"in to your left, toward the switch",       spaceopens:"in the middle" },
+    lw:       { position:"left winger",        passthrow:"pass",    showedthem:"to your right, toward the inside pass",    spaceopens:"down the left line" },
+    rw:       { position:"right winger",       passthrow:"pass",    showedthem:"to your left, toward the inside pass",     spaceopens:"down the right line" },
+    lb:       { position:"left back",          passthrow:"pass",    showedthem:"toward the left line",                     spaceopens:"inside, to your right" },
+    rb:       { position:"right back",         passthrow:"pass",    showedthem:"toward the right line",                    spaceopens:"inside, to your left" },
+    striker:  { position:"the 9",              passthrow:"layoff",  showedthem:"forward, to squeeze the layoff",           spaceopens:"behind them, on your left" },
+    gk:       { position:"in goal",            passthrow:"throw",   showedthem:"to your right, toward the right back throw",spaceopens:"underneath, in the middle" }
   };
   var BLANK = {
     position:'[position]', passthrow:'[pass/throw]',

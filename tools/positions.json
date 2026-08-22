@@ -1,0 +1,175 @@
+[
+  {
+    "key": "mid",
+    "label": "Central midfielder (6/8)",
+    "scene": [
+      "\"I want you to imagine that you are facing in toward the middle of the field, about a third of the way up. Your center back is just above the D. The goal you're defending is to your right, the opponent's goal is to your left.\"",
+      "\"The center back receives the ball, she takes a touch towards you, and now she's gonna pass the ball forward to you.\"",
+      "\"You're gonna take a quick check and you see there's a little bit of space - the next defender is at least three, four yards away. So you're gonna let the ball go across your body onto your left foot, because that's your upfield foot, and now you're gonna be turning and facing forward.\""
+    ],
+    "option1": "\"As you start to receive that ball and face forward, what do you expect the defender (about four yards away) to do?\" · \"Imagine you see a passing option on either your left or your right - where do you see it?\" · \"If you take your touch toward the right and begin to pass, what's her reaction gonna be?\"",
+    "expect1": "(steps in to their left, toward your right, to close the passing lane - the pass gets more difficult.)",
+    "option2": "\"But now imagine you let the ball run across your body onto your left foot and you drop your left shoulder, as if you're gonna dribble to the left. What do you think the defender will do differently in that circumstance?\"",
+    "expect2": "(bites to your left, following the shoulder drop - and the space opens back up on your right, where your passing option is.)",
+    "directions": "you show = dribble to your **left** (shoulder drop) → defender shifts to your **left** → real action = pass to your **right**, to the teammate the player placed there.",
+    "fills": {
+      "position": "the six",
+      "passthrow": "pass",
+      "showedthem": "to the left, as you drop your shoulder",
+      "spaceopens": "on the right"
+    }
+  },
+  {
+    "key": "lcb",
+    "label": "Left center back",
+    "scene": [
+      "\"Imagine your goalkeeper has the ball at their feet, just outside the 18. You're the left center back, and you've dropped wide to your left, about level with the corner of the box, to receive. Their striker - the 9 - is about ten yards away and starting to move toward you.\"",
+      "\"Your keeper plays it into your feet.\""
+    ],
+    "option1": "\"As it arrives, you open up toward the left sideline like you're gonna play down the left line. What's that 9 gonna do?\"",
+    "expect1": "(presses your outside [left] shoulder and shows you down the left line - your forward options narrow.)",
+    "option2": "\"Rewind. Same ball. This time you turn your hips in to your right and open your body like you're gonna switch it across to your right center back. Now what does the 9 do?\"",
+    "expect2": "(turns in toward that switch - and the middle opens for you to step into.)",
+    "directions": "you show = switch to your **right** (to your right center back) → the 9 turns toward the switch → real action = step forward into the **middle** with the ball.",
+    "fills": {
+      "position": "left center back",
+      "passthrow": "pass",
+      "showedthem": "in to your right, toward the switch",
+      "spaceopens": "in the middle"
+    }
+  },
+  {
+    "key": "rcb",
+    "label": "Right center back",
+    "scene": [
+      "\"Imagine your goalkeeper has the ball at their feet, just outside the 18. You're the right center back, and you've dropped wide to your right, about level with the corner of the box, to receive. Their striker - the 9 - is about ten yards away and starting to move toward you.\"",
+      "\"Your keeper plays it into your feet.\""
+    ],
+    "option1": "\"As it arrives, you open up toward the right sideline like you're gonna play down the right line. What's that 9 gonna do?\"",
+    "expect1": "(presses your outside [right] shoulder and shows you down the right line - your forward options narrow.)",
+    "option2": "\"Rewind. Same ball. This time you turn your hips in to your left and open your body like you're gonna switch it across to your left center back. Now what does the 9 do?\"",
+    "expect2": "(turns in toward that switch - and the middle opens for you to step into.)",
+    "directions": "you show = switch to your **left** (to your left center back) → the 9 turns toward the switch → real action = step forward into the **middle** with the ball.",
+    "fills": {
+      "position": "right center back",
+      "passthrow": "pass",
+      "showedthem": "in to your left, toward the switch",
+      "spaceopens": "in the middle"
+    }
+  },
+  {
+    "key": "lw",
+    "label": "Left winger",
+    "scene": [
+      "\"Imagine you're playing left wing, high and wide, hugging the left touchline.\"",
+      "\"Your midfielder has the ball in the middle of the field and plays it out to you. You've got a bit of space, so you receive it facing forward - facing the opponent's goal. Their right back is three, four yards off you, closing you down.\""
+    ],
+    "option1": "\"If you push your touch straight down the left line, what's that right back gonna do?\"",
+    "expect1": "(shows you to the left touchline - the lane down the line gets smaller.)",
+    "option2": "\"Rewind. This time, as they get close, you swing your hips to your right like you're gonna pass back inside to your midfielder. What do they do now?\"",
+    "expect2": "(jumps toward the inside pass, to your right - and the left line opens up for you to attack.)",
+    "directions": "you show = inside pass to your **right** (back to your midfielder) → the right back jumps inside → real action = touch past them down the **left line**.",
+    "fills": {
+      "position": "left winger",
+      "passthrow": "pass",
+      "showedthem": "to your right, toward the inside pass",
+      "spaceopens": "down the left line"
+    }
+  },
+  {
+    "key": "rw",
+    "label": "Right winger",
+    "scene": [
+      "\"Imagine you're playing right wing, high and wide, hugging the right touchline.\"",
+      "\"Your midfielder has the ball in the middle of the field and plays it out to you. You've got a bit of space, so you receive it facing forward - facing the opponent's goal. Their left back is three, four yards off you, closing you down.\""
+    ],
+    "option1": "\"If you push your touch straight down the right line, what's that left back gonna do?\"",
+    "expect1": "(shows you to the right touchline - the lane down the line gets smaller.)",
+    "option2": "\"Rewind. This time, as they get close, you swing your hips to your left like you're gonna pass back inside to your midfielder. What do they do now?\"",
+    "expect2": "(jumps toward the inside pass, to your left - and the right line opens up for you to attack.)",
+    "directions": "you show = inside pass to your **left** (back to your midfielder) → the left back jumps inside → real action = touch past them down the **right line**.",
+    "fills": {
+      "position": "right winger",
+      "passthrow": "pass",
+      "showedthem": "to your left, toward the inside pass",
+      "spaceopens": "down the right line"
+    }
+  },
+  {
+    "key": "lb",
+    "label": "Left back",
+    "scene": [
+      "\"Imagine you're playing left back. Your center back has the ball and plays it across to you, out to the left.\"",
+      "\"Their right winger is running at you to press, and your left winger is ahead of you, up the left line.\""
+    ],
+    "option1": "\"If you open up and get ready to play the obvious pass down the left line, what does their winger do?\"",
+    "expect1": "(angles the press toward the left touchline to cut off the line - the lane closes.)",
+    "option2": "\"Rewind. This time you open your hips like you're playing down the left line - and then chop it inside, to your right, toward your 6. What happens to the player pressing you?\"",
+    "expect2": "(overruns toward the left line - and the inside lane, to your right, opens.)",
+    "directions": "you show = pass down the **left line** (to your left winger) → the presser overruns to the line → real action = chop inside to your **right**, to your 6.",
+    "fills": {
+      "position": "left back",
+      "passthrow": "pass",
+      "showedthem": "toward the left line",
+      "spaceopens": "inside, to your right"
+    }
+  },
+  {
+    "key": "rb",
+    "label": "Right back",
+    "scene": [
+      "\"Imagine you're playing right back. Your center back has the ball and plays it across to you, out to the right.\"",
+      "\"Their left winger is running at you to press, and your right winger is ahead of you, up the right line.\""
+    ],
+    "option1": "\"If you open up and get ready to play the obvious pass down the right line, what does their winger do?\"",
+    "expect1": "(angles the press toward the right touchline to cut off the line - the lane closes.)",
+    "option2": "\"Rewind. This time you open your hips like you're playing down the right line - and then chop it inside, to your left, toward your 6. What happens to the player pressing you?\"",
+    "expect2": "(overruns toward the right line - and the inside lane, to your left, opens.)",
+    "directions": "you show = pass down the **right line** (to your right winger) → the presser overruns to the line → real action = chop inside to your **left**, to your 6.",
+    "fills": {
+      "position": "right back",
+      "passthrow": "pass",
+      "showedthem": "toward the right line",
+      "spaceopens": "inside, to your left"
+    }
+  },
+  {
+    "key": "striker",
+    "label": "Striker (9)",
+    "scene": [
+      "\"Imagine you're playing as the 9. Your midfielder is driving forward with the ball, and you check toward them to receive it into your feet with your back to goal.\"",
+      "\"Their center back is tight on your back, leaning on your right shoulder - you can feel them there.\""
+    ],
+    "option1": "\"If you receive it and just lay it straight back to your midfielder, what does that center back do?\"",
+    "expect1": "(stays touch-tight on your back - safe, but you never turn, never threaten.)",
+    "option2": "\"Rewind. Same ball. This time you shape your body like you're gonna lay it off again - but instead you let it run across your body onto your left foot and spin off to your left, over their blind side. What does the center back do when you show them the layoff?\"",
+    "expect2": "(steps forward onto your right shoulder to squeeze it - and space opens behind them, on your left, for the turn.)",
+    "directions": "you show = layoff straight back to your midfielder → the center back steps forward onto your **right** shoulder → real action = let it run to your **left** and spin left, off their blind side.",
+    "fills": {
+      "position": "the 9",
+      "passthrow": "layoff",
+      "showedthem": "forward, to squeeze the layoff",
+      "spaceopens": "behind them, on your left"
+    }
+  },
+  {
+    "key": "gk",
+    "label": "Goalkeeper",
+    "scene": [
+      "\"Imagine you've just caught a cross and you've got the ball in your hands.\"",
+      "\"Their striker is jogging toward you to close you down. Your right back is wide on the right, and your 6 is showing underneath in the middle.\""
+    ],
+    "option1": "\"If you look straight at your right back and wind up to throw it out to the right, what does the striker's run do?\"",
+    "expect1": "(bends to your right to cut off that lane - the throw gets riskier the longer you wait.)",
+    "option2": "\"Rewind. This time you keep your eyes on the right back and shape like you're throwing right - as the striker's run bends that way, who's now open underneath?\"",
+    "expect2": "(the 6, in the middle - you moved the presser with your eyes and your shape, without touching the ball.)",
+    "directions": "you show = throw out to your **right** (to your right back) → the striker's run bends to your **right** → real action = release **underneath, in the middle**, to your 6.",
+    "fills": {
+      "position": "in goal",
+      "passthrow": "throw",
+      "showedthem": "to your right, toward the right back throw",
+      "spaceopens": "underneath, in the middle"
+    },
+    "extra": "\"Your look was the feint - same rule as everywhere else on the field.\""
+  }
+]
