@@ -110,6 +110,9 @@
     border-bottom:1px dashed #9AA0A8; color:#4A5058; font-style:normal;
     white-space:nowrap;
   }
+  /* Once resolved from the position tab or the player-details bar, a placeholder
+     stops looking like a blank and reads as part of the line. */
+  .ph.filled{ border-bottom:0; color:inherit; }
 
   /* ---- lists ---- */
   ul,ol{ margin:0 0 13px; padding-left:1.4em; }
@@ -154,6 +157,19 @@
   }
   .variant[hidden]{ display:none; }
 
+  /* Scene beats: delivered one at a time, with a check-in between each. */
+  ul.beats{ list-style:none; padding-left:0; margin:0 0 9px; }
+  ul.beats > li{ margin:0; }
+  ul.beats > li + li{ margin-top:0; }
+  .checkcue{
+    display:flex; align-items:center; gap:9px; margin:9px 0;
+    font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--ctx); opacity:.75;
+  }
+  .checkcue::before,.checkcue::after{
+    content:""; flex:1; height:1px; background:#C9DDF0;
+  }
+
   /* ---- position tabs ---- */
   .posbar{
     position:sticky; top:0; z-index:5; background:var(--ground);
@@ -172,6 +188,25 @@
   }
   .postab:hover{ border-color:var(--ctx); color:var(--ctx); }
   .postab[aria-selected="true"]{ background:var(--ink); border-color:var(--ink); color:#fff; }
+
+  /* ---- player details: typed once at the top of the call, resolved page-wide ---- */
+  .playerbar{ display:flex; flex-wrap:wrap; gap:7px 14px; align-items:center; margin:12px 0 0; }
+  .playerbar label{
+    display:flex; align-items:center; gap:7px;
+    font-size:11px; font-weight:700; letter-spacing:.09em; text-transform:uppercase;
+    color:var(--muted);
+  }
+  .playerbar input{
+    font:inherit; font-size:14px; font-weight:400; letter-spacing:0; text-transform:none;
+    color:var(--ink); background:var(--ground);
+    border:1px solid var(--rule); border-radius:6px; padding:5px 9px; width:9em;
+  }
+  .playerbar input:focus{ outline:2px solid var(--ctx); outline-offset:1px; border-color:var(--ctx); }
+  .playerbar .clear{
+    font:inherit; font-size:12.5px; font-weight:600; color:var(--muted);
+    background:none; border:0; padding:5px 2px; cursor:pointer; text-decoration:underline;
+  }
+  .playerbar .clear:hover{ color:var(--ctx); }
 
   /* ---- dialogue transcripts ---- */
   .dlg{ margin:0 0 13px; padding-left:14px; border-left:2px solid var(--rule); }
@@ -231,7 +266,7 @@
     </header>
 
     <aside class="callout">
-      <p><strong>Pick the player's position below.</strong> Three things in the flow rewrite themselves to match — the scene in step 2, the question in step 4, and the question in step 5. Every other line is fixed and never changes, whoever you're talking to.</p>
+      <p><strong>Set the position and their kit colours below and the whole script resolves.</strong> Three things rewrite themselves with the position — the scene in step 2, the question in step 4, the question in step 5 — and every blank that can be filled from what you've entered gets filled in place. Everything else is fixed and never changes, whoever you're talking to.</p>
     </aside>
 
     <div class="posbar">
@@ -243,6 +278,11 @@
         <button class="postab" role="tab" type="button" data-pos="striker" aria-selected="false">Striker (9)</button>
         <button class="postab" role="tab" type="button" data-pos="fb" aria-selected="false">Fullback / outside back</button>
         <button class="postab" role="tab" type="button" data-pos="gk" aria-selected="false">Goalkeeper</button>
+      </div>
+      <div class="playerbar">
+        <label>Their kit <input type="text" id="theircolor" autocomplete="off" spellcheck="false" placeholder="black"></label>
+        <label>Opponent kit <input type="text" id="othercolor" autocomplete="off" spellcheck="false" placeholder="white"></label>
+        <button class="clear" type="button" id="clearplayer">Clear</button>
       </div>
     </div>
 
@@ -262,31 +302,57 @@
       <li>
         <span class="steplabel">Set the scene</span>
         <ul>
-          <li><strong class="ctx">Position</strong> <span class="fixedtag">Fixed</span> "You've played <span class="ph">[position]</span>, right? … imagine you're playing <span class="ph">[position]</span>." / "Is that a normal position for you to play?"</li>
+          <li><strong class="ctx">Position</strong> <span class="fixedtag">Fixed</span> "You've played <span class="ph" data-fill="position">[position]</span>, right? … imagine you're playing <span class="ph" data-fill="position">[position]</span>." / "Is that a normal position for you to play?"</li>
           <li><strong class="ctx">Kit</strong> <span class="fixedtag">Fixed</span> "What do you wear for your colored jerseys?"
-            <ul><li>"So you're in <span class="ph">[their color]</span> and the opponent is in <span class="ph">[other color]</span> — it'll just make it easy for us to visualize."</li></ul>
+            <ul><li>"So you're in <span class="ph" data-fill="theircolor">[their color]</span> and the opponent is in <span class="ph" data-fill="othercolor">[other color]</span> — it'll just make it easy for us to visualize."</li></ul>
           </li>
         </ul>
 
         <div class="slot">
-          <p class="slothd">Scene <span style="font-weight:600;text-transform:none;letter-spacing:0">— swaps with position</span></p>
+          <p class="slothd">Scene <span style="font-weight:600;text-transform:none;letter-spacing:0">— swaps with position. One beat at a time, check in between.</span></p>
           <div class="variant" data-var="mid">
-            <ul><li>"I want you to imagine that you are facing in toward the middle of the field, about a third of the way up. Your center back is just above the D. The goal you're defending is to your right, the opponent's goal is to your left. The center back receives the ball, she takes a touch towards you, and now she's gonna pass the ball forward to you. You're gonna take a quick check and you see there's a little bit of space — the next defender is at least three, four yards away. So you're gonna let the ball go across your body onto your left foot, because that's your upfield foot, and now you're gonna be turning and facing forward."</li></ul>
+            <ul class="beats">
+              <li>"I want you to imagine that you are facing in toward the middle of the field, about a third of the way up. Your center back is just above the D. The goal you're defending is to your right, the opponent's goal is to your left."</li>
+              <li><p class="checkcue">check in</p></li>
+              <li>"The center back receives the ball, she takes a touch towards you, and now she's gonna pass the ball forward to you."</li>
+              <li><p class="checkcue">check in</p></li>
+              <li>"You're gonna take a quick check and you see there's a little bit of space — the next defender is at least three, four yards away. So you're gonna let the ball go across your body onto your left foot, because that's your upfield foot, and now you're gonna be turning and facing forward."</li>
+            </ul>
           </div>
           <div class="variant" data-var="cb" hidden>
-            <ul><li>"Imagine your goalkeeper has the ball at their feet, just outside the 18. You're the left center back, and you've dropped wide, about level with the corner of the box, to receive. Their striker — the 9 — is about ten yards away and starting to move toward you. Your keeper plays it into your feet."</li></ul>
+            <ul class="beats">
+              <li>"Imagine your goalkeeper has the ball at their feet, just outside the 18. You're the left center back, and you've dropped wide, about level with the corner of the box, to receive. Their striker — the 9 — is about ten yards away and starting to move toward you."</li>
+              <li><p class="checkcue">check in</p></li>
+              <li>"Your keeper plays it into your feet."</li>
+            </ul>
           </div>
           <div class="variant" data-var="winger" hidden>
-            <ul><li>"Imagine you're playing on the right wing, high and wide, hugging the touchline. Your midfielder has the ball in the middle of the field and plays it out to you. You've got a bit of space, so you receive it facing forward — facing the opponent's goal. Their fullback is three, four yards off you, closing you down."</li></ul>
+            <ul class="beats">
+              <li>"Imagine you're playing on the right wing, high and wide, hugging the touchline."</li>
+              <li><p class="checkcue">check in</p></li>
+              <li>"Your midfielder has the ball in the middle of the field and plays it out to you. You've got a bit of space, so you receive it facing forward — facing the opponent's goal. Their fullback is three, four yards off you, closing you down."</li>
+            </ul>
           </div>
           <div class="variant" data-var="striker" hidden>
-            <ul><li>"Imagine you're playing as the 9. Your midfielder is driving forward with the ball, and you check toward them to receive it into your feet with your back to goal. Their center back is tight on your back — you can feel them there."</li></ul>
+            <ul class="beats">
+              <li>"Imagine you're playing as the 9. Your midfielder is driving forward with the ball, and you check toward them to receive it into your feet with your back to goal."</li>
+              <li><p class="checkcue">check in</p></li>
+              <li>"Their center back is tight on your back — you can feel them there."</li>
+            </ul>
           </div>
           <div class="variant" data-var="fb" hidden>
-            <ul><li>"Imagine you're playing right back. Your center back has the ball and plays it across to you. Their winger is running at you to press, and your winger is ahead of you, up the line."</li></ul>
+            <ul class="beats">
+              <li>"Imagine you're playing right back. Your center back has the ball and plays it across to you."</li>
+              <li><p class="checkcue">check in</p></li>
+              <li>"Their winger is running at you to press, and your winger is ahead of you, up the line."</li>
+            </ul>
           </div>
           <div class="variant" data-var="gk" hidden>
-            <ul><li>"Imagine you've just caught a cross and you've got the ball in your hands. Their striker is jogging toward you to close you down. Your fullback is wide on the right, and your 6 is showing underneath in the middle."</li></ul>
+            <ul class="beats">
+              <li>"Imagine you've just caught a cross and you've got the ball in your hands."</li>
+              <li><p class="checkcue">check in</p></li>
+              <li>"Their striker is jogging toward you to close you down. Your fullback is wide on the right, and your 6 is showing underneath in the middle."</li>
+            </ul>
           </div>
         </div>
       </li>
@@ -653,24 +719,71 @@
 <script>
 (function(){
   var POSITIONS = ['mid','cb','winger','striker','fb','gk'];
+  // How each position is said aloud in the fixed "you've played …" line.
+  var POSNAME = {
+    mid:'central midfielder', cb:'center back', winger:'winger',
+    striker:'striker', fb:'fullback', gk:'goalkeeper'
+  };
+  var BLANK = { position:'[position]', theircolor:'[their color]', othercolor:'[other color]' };
+
   var tabs = Array.prototype.slice.call(document.querySelectorAll('.postab'));
   var variants = Array.prototype.slice.call(document.querySelectorAll('.variant'));
   var passthrow = Array.prototype.slice.call(document.querySelectorAll('[data-passthrow]'));
+  var fills = Array.prototype.slice.call(document.querySelectorAll('[data-fill]'));
+  var theirs = document.getElementById('theircolor');
+  var others = document.getElementById('othercolor');
+  var clearBtn = document.getElementById('clearplayer');
 
-  function select(pos){
-    if(POSITIONS.indexOf(pos) === -1) pos = 'mid';
+  var pos = 'mid';
+
+  function store(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
+  function load(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
+
+  // Resolve every blank the page can currently answer. Anything still unknown
+  // falls back to its bracketed form so the rep can see it needs filling live.
+  function resolve(){
+    var values = {
+      position: POSNAME[pos],
+      theircolor: theirs.value.trim(),
+      othercolor: others.value.trim()
+    };
+    fills.forEach(function(n){
+      var key = n.dataset.fill;
+      var v = values[key];
+      if(v){ n.textContent = v; n.classList.add('filled'); }
+      else { n.textContent = BLANK[key]; n.classList.remove('filled'); }
+    });
+  }
+
+  function select(next){
+    pos = (POSITIONS.indexOf(next) === -1) ? 'mid' : next;
     tabs.forEach(function(t){ t.setAttribute('aria-selected', String(t.dataset.pos === pos)); });
     variants.forEach(function(v){ v.hidden = (v.dataset.var !== pos); });
     // The keeper has the ball in their hands, so the fixed line reads "throw".
     passthrow.forEach(function(n){ n.textContent = (pos === 'gk') ? 'throw' : 'pass'; });
-    try{ localStorage.setItem('acta-viz-pos', pos); }catch(e){}
+    store('acta-viz-pos', pos);
+    resolve();
   }
 
   tabs.forEach(function(t){ t.addEventListener('click', function(){ select(t.dataset.pos); }); });
 
-  var saved = null;
-  try{ saved = localStorage.getItem('acta-viz-pos'); }catch(e){}
-  select(saved || 'mid');
+  [theirs, others].forEach(function(input){
+    input.addEventListener('input', function(){
+      store('acta-viz-' + input.id, input.value);
+      resolve();
+    });
+  });
+
+  clearBtn.addEventListener('click', function(){
+    theirs.value = ''; others.value = '';
+    store('acta-viz-theircolor',''); store('acta-viz-othercolor','');
+    resolve();
+    theirs.focus();
+  });
+
+  theirs.value = load('acta-viz-theircolor') || '';
+  others.value = load('acta-viz-othercolor') || '';
+  select(load('acta-viz-pos') || 'mid');
 })();
 </script>
 
