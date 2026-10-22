@@ -1,0 +1,493 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="description" content="Outbound dial cheat sheet (application follow-up) — internal sales reference.">
+<title>Outbound Dial Cheat Sheet — ACTA Academy</title>
+<style>
+  :root{
+    --ink:#101114;           /* say-this text + headings */
+    --ctx:#2E7CC4;           /* backing context — light blue, held legible on white */
+    --ctx-bg:#F2F7FC;
+    --rule:#E3E6EB;
+    --muted:#6B7280;
+    --ground:#FFFFFF;
+    --warn:#B45309;
+    --warn-bg:#FFF7ED;
+    --measure:68ch;
+    --sans:ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  }
+  /* Deliberate single-theme page: this is read aloud on live calls and must look
+     identical everywhere, so the dark-mode toggle is pinned to the same ground. */
+  @media (prefers-color-scheme: dark){ :root{ --ground:#FFFFFF; --ink:#101114; } }
+  :root[data-theme="dark"],:root[data-theme="light"]{ --ground:#FFFFFF; --ink:#101114; }
+
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    background:var(--ground); color:var(--ink);
+    font-family:var(--sans); font-size:17px; line-height:1.62;
+    margin:0; padding:0;
+  }
+  main{ padding:36px 24px 96px; max-width:var(--measure); margin:0 auto; }
+  @media (min-width:1040px){ main{ padding:56px 40px 120px; } }
+
+  /* ---- masthead + legend ---- */
+  .home{ font-size:13px; color:var(--muted); margin:0 0 22px; }
+  .home a{ color:var(--muted); text-decoration:none; }
+  .home a:hover{ color:var(--ctx); }
+  h1{
+    font-size:clamp(28px,4.2vw,38px); line-height:1.14; font-weight:800;
+    letter-spacing:-.021em; text-wrap:balance; margin:0 0 14px;
+  }
+  .legend{
+    display:flex; flex-wrap:wrap; gap:8px 22px; align-items:center;
+    padding:14px 16px; border:1px solid var(--rule); border-radius:8px;
+    margin:0 0 22px; font-size:13.5px;
+  }
+  .legend b{ font-weight:700; }
+  .legend .sw{ display:inline-block; width:9px; height:9px; border-radius:50%; margin-right:7px; vertical-align:middle; }
+  .legend .say .sw{ background:var(--ink); }
+  .legend .ctxk .sw{ background:var(--ctx); }
+  .legend .ctxk{ color:var(--ctx); }
+
+  /* ---- situation tabs: sticky so the rep can switch mid-call ---- */
+  .tabs{
+    position:sticky; top:0; z-index:5; background:var(--ground);
+    padding:12px 0 12px; border-bottom:1px solid var(--rule); margin:0 0 22px;
+  }
+  .tabs .navlabel{
+    font-size:11px; font-weight:700; letter-spacing:.09em; text-transform:uppercase;
+    color:var(--muted); margin:0 0 8px;
+  }
+  .tablist{ display:flex; flex-wrap:wrap; gap:8px; }
+  .tab{
+    border:1px solid var(--rule); background:var(--ground); color:var(--ink);
+    border-radius:999px; padding:7px 14px; font:600 14px var(--sans); line-height:1.3;
+    cursor:pointer; transition:border-color .12s ease, background .12s ease;
+  }
+  .tab:hover{ border-color:var(--ctx); }
+  .tab[aria-selected="true"]{ background:var(--ink); border-color:var(--ink); color:#FFFFFF; }
+  .tab:focus-visible,.route button:focus-visible,a:focus-visible{ outline:2px solid var(--ctx); outline-offset:2px; }
+
+  .sitbar{ display:grid; gap:10px; grid-template-columns:minmax(0,1fr); margin:0 0 26px; }
+  @media (min-width:600px){ .sitbar{ grid-template-columns:repeat(3,minmax(0,1fr)); } }
+  .sitbar div{ border:1px solid var(--rule); border-radius:8px; padding:10px 14px; min-width:0; }
+  .sitbar b{ display:block; font-size:11px; font-weight:700; letter-spacing:.09em; text-transform:uppercase; color:var(--muted); margin:0 0 2px; }
+  .sitbar span{ font-weight:600; font-size:15px; line-height:1.35; display:block; }
+
+  /* ---- headings ---- */
+  h2,h3{ color:var(--ink); text-wrap:balance; }
+  h2{
+    font-size:25px; font-weight:800; letter-spacing:-.015em; line-height:1.22;
+    margin:52px 0 14px; padding-top:22px; border-top:2px solid var(--ink);
+  }
+  h3{ font-size:19.5px; font-weight:700; line-height:1.28; margin:34px 0 10px; }
+  section > h2:first-child{ margin-top:0; }
+
+  p{ margin:0 0 13px; }
+
+  /* ---- backing context ---- */
+  .ctx{ color:var(--ctx); }
+  p.ctx-block{ color:var(--ctx); }
+  .callout{
+    background:var(--ctx-bg); border:1px solid #D6E4F2; border-left:3px solid var(--ctx);
+    border-radius:8px; padding:16px 18px; margin:0 0 26px; color:var(--ctx);
+  }
+  .callout p{ margin:0 0 9px; }
+  .callout p:last-child{ margin-bottom:0; }
+  .callout strong{ color:var(--ctx); }
+  .callout.warn{ background:var(--warn-bg); border-color:#FDE4C8; border-left-color:var(--warn); color:var(--warn); }
+  .callout.warn strong{ color:var(--warn); }
+
+  /* ---- route box (situation F) ---- */
+  .route{
+    background:var(--warn-bg); border:1px solid #FDE4C8; border-left:3px solid var(--warn);
+    border-radius:8px; padding:16px 18px; margin:0 0 26px;
+  }
+  .route p{ margin:0 0 10px; }
+  .route .btns{ display:flex; flex-wrap:wrap; gap:8px; }
+  .route button{
+    border:1px solid var(--ink); background:var(--ground); color:var(--ink);
+    border-radius:6px; padding:8px 12px; font:600 14px var(--sans); cursor:pointer; text-align:left;
+  }
+  .route button:hover{ background:var(--ink); color:#FFFFFF; }
+
+  /* ---- lists ---- */
+  ul{ margin:0 0 13px; padding-left:1.4em; }
+  li{ margin:0 0 7px; }
+  li > ul{ margin:7px 0 0; }
+  li::marker{ color:var(--muted); }
+  ul ul{ list-style-type:circle; }
+  strong{ font-weight:700; }
+
+  details{ border:1px dashed var(--rule); border-radius:8px; padding:10px 14px; margin:0 0 16px; }
+  summary{ cursor:pointer; font-weight:600; color:var(--muted); font-size:15px; }
+  details[open] summary{ margin-bottom:10px; }
+  details ul{ margin-bottom:4px; }
+
+  [hidden]{ display:none !important; }
+  footer{ color:var(--muted); font-size:13.5px; border-top:1px solid var(--rule); padding-top:14px; margin-top:52px; }
+
+  @media print{
+    .tabs{ position:static; }
+    body{ font-size:11.5pt; }
+    main{ max-width:none; padding:0; }
+    h2,h3{ break-after:avoid; }
+    li,p{ break-inside:avoid; }
+    .callout{ -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  }
+</style>
+</head>
+<body>
+
+<main>
+  <p class="home"><a href="../">← ACTA sales library</a></p>
+  <header class="masthead">
+    <h1>Outbound Dial Cheat Sheet</h1>
+    <div class="legend">
+      <span class="say"><span class="sw"></span><b>Black</b> — say this</span>
+      <span class="ctxk"><span class="sw"></span><b>Blue</b> — backing context, don't read aloud</span>
+    </div>
+  </header>
+
+  <aside class="callout"><p>Outbound dial to a parent who's applied, or who's been through part of the sales process before. Short call, 5–10 minutes. The only goal is to book the next call, which in almost every case is a PDS. For the full discovery, use the <a href="../pds/" style="color:inherit">PDS Script</a>.</p></aside>
+
+  <div class="tabs">
+    <p class="navlabel">Who are you calling?</p>
+    <div class="tablist" role="tablist" id="tablist">
+      <button class="tab" role="tab" type="button" data-sit="A" id="tab-A">Applied, never booked</button>
+      <button class="tab" role="tab" type="button" data-sit="B" id="tab-B">Booked, no-showed</button>
+      <button class="tab" role="tab" type="button" data-sit="C" id="tab-C">Booked, cancelled</button>
+      <button class="tab" role="tab" type="button" data-sit="D" id="tab-D">Had a PDS, no PEM</button>
+      <button class="tab" role="tab" type="button" data-sit="E" id="tab-E">Had a PEM, didn't close</button>
+      <button class="tab" role="tab" type="button" data-sit="F" id="tab-F">Booked, no record</button>
+    </div>
+  </div>
+
+  <div class="sitbar">
+    <div><b>Situation</b><span id="sit-name"></span></div>
+    <div><b>What we do</b><span id="sit-depth"></span></div>
+    <div><b>Next call</b><span id="sit-next"></span></div>
+  </div>
+
+  <!-- 1. OPENER -->
+  <section>
+    <h2>1. Opener</h2>
+
+    <div data-sit="A">
+      <ul>
+        <li>Hey, is this [name]?</li>
+        <li>Hey [name], this is [your name] with ACTA Football. I see you submitted an application about decision making in [player's/your child's] soccer. I guess, firstly, do you remember submitting that and what it was about?</li>
+      </ul>
+      <p class="ctx-block">If now's bad: "No worries, when's a better time today or tomorrow?" Lock a specific time, then call back.</p>
+    </div>
+
+    <div data-sit="B">
+      <ul>
+        <li>Hey, is this [name]?</li>
+        <li>Hey [name], this is [your name] with ACTA Football. I see you had a call booked in with us on [day] about decision making in [player's/your child's] soccer, but it looks like the call didn't happen. No worries at all. But I guess, firstly, do you remember booking that call and what it was about?</li>
+      </ul>
+      <p class="ctx-block">Don't make them feel bad about missing it. Things come up. If they apologise: "Honestly don't worry about it, it happens all the time."</p>
+    </div>
+
+    <div data-sit="C">
+      <ul>
+        <li>Hey, is this [name]?</li>
+        <li>Hey [name], this is [your name] with ACTA Football. I see you had a call booked in with us for [day] about decision making in [player's/your child's] soccer, and it ended up getting cancelled. Totally fine. But I guess, firstly, do you remember booking that call and what it was about?</li>
+        <li>And just so I know, was it more of a timing thing, or did something change?</li>
+      </ul>
+      <p class="ctx-block">Find out why they cancelled. Timing = carry on as normal. Price, partner or "not sure it's for us" = note it and make sure you cover it properly in the price and decision maker sections.</p>
+    </div>
+
+    <div data-sit="D E">
+      <ul>
+        <li>Hey, is this [name]?</li>
+        <li>Hey [name], this is [your name] with ACTA Football. I see you spoke with [rep name] back in [month] about decision making in [player's/your child's] soccer. I guess, firstly, do you remember that call and what it was about?</li>
+        <li>And when you last spoke with [rep name], where did you guys leave things?</li>
+      </ul>
+      <p class="ctx-block">Let them tell you. You're listening for what stopped them last time: timing, price, partner, or they weren't sold on it. That's what the next call needs to solve.</p>
+    </div>
+
+    <div data-sit="F">
+      <ul>
+        <li>Hey, is this [name]?</li>
+        <li>Hey [name], this is [your name] with ACTA Football. I see you had a call booked in with us back in [month] about decision making in [player's/your child's] soccer. I guess, firstly, do you remember booking that call and what it was about?</li>
+        <li>And did you end up speaking with someone from our team, or did that call not end up happening?</li>
+      </ul>
+      <div class="route">
+        <p><strong>Their answer decides the rest of the call.</strong> Switch tab now, then carry on from section 2. Update the CRM after the call so the next person has the data.</p>
+        <div class="btns">
+          <button type="button" data-go="D">They spoke with someone → Had a PDS, no PEM</button>
+          <button type="button" data-go="E">They spoke and heard the offer → Had a PEM, didn't close</button>
+          <button type="button" data-go="B">The call didn't happen → Booked, no-showed</button>
+        </div>
+      </div>
+      <p class="ctx-block">If you can't tell which, the sections below run it as a no-show.</p>
+    </div>
+  </section>
+
+  <!-- 2. BASICS -->
+  <section>
+    <h2>2. The basics</h2>
+    <div data-sit="A">
+      <p class="ctx-block">Ask it fresh.</p>
+      <ul>
+        <li>Great, so can you give me a bit of context: what's [her/his] name, how old is [she/he], and what level is [she/he] playing at?</li>
+      </ul>
+    </div>
+    <div data-sit="B C D E F">
+      <p class="ctx-block">You should have most of this in the CRM, so confirm it rather than asking from scratch.</p>
+      <ul>
+        <li>So just to refresh my memory, [player] is [age] and playing at [level], is that still right?</li>
+      </ul>
+      <details><summary>If the CRM is empty, ask it fresh</summary>
+        <ul><li>Great, so can you give me a bit of context: what's [her/his] name, how old is [she/he], and what level is [she/he] playing at?</li></ul>
+      </details>
+    </div>
+    <p class="ctx-block">Player fit DQ if it's rec league, under 9, or the player isn't motivated to improve (see section 6).</p>
+  </section>
+
+  <!-- 3. CHALLENGE -->
+  <section>
+    <h2>3. The challenge</h2>
+    <div data-sit="A">
+      <ul>
+        <li>And what's going on in [her/his] game that made you think this might be something we can help with?</li>
+      </ul>
+    </div>
+    <div data-sit="B C D E F">
+      <ul>
+        <li>And last time it sounded like [XYZ] was the main thing. Is that still what's going on, or has anything changed since?</li>
+      </ul>
+      <details><summary>If there's no note of the challenge in the CRM</summary>
+        <ul><li>And what's going on in [her/his] game that made you think this might be something we can help with?</li></ul>
+      </details>
+    </div>
+    <p class="ctx-block">Then probe lightly. Pick 2–3. Do not go to PDS depth.</p>
+    <ul>
+      <li>Can you give me an example of when you've seen that happen on the field?</li>
+      <li>Is that in games, training, or both?</li>
+      <li>How long has that been going on for?</li>
+      <li>What, if anything, have you already tried to help [her/him] with it?</li>
+      <li>Is it affecting [her/him] getting picked, or time on the field?</li>
+    </ul>
+  </section>
+
+  <!-- 4. AFFIRM -->
+  <section>
+    <h2>4. Affirm and what we do</h2>
+    <div data-sit="A">
+      <ul>
+        <li>Ok, well I'm really glad you applied. What you're describing with [XYZ] is a really common thing we help players with.</li>
+      </ul>
+    </div>
+    <div data-sit="B C D E F">
+      <ul>
+        <li>Ok, well I'm really glad I caught you. What you're describing with [XYZ] is a really common thing we help players with.</li>
+      </ul>
+    </div>
+    <p class="ctx-block">Say it like you mean it. You're on their side.</p>
+
+    <div data-sit="B C D E F">
+      <h3>How much do you remember?</h3>
+      <p class="ctx-block">Ask first. Their answer decides how much you explain.</p>
+      <ul>
+        <li>And how much do you remember about what we do from when you <span data-sit="B C F">looked into us</span><span data-sit="D E">spoke with [rep name]</span>?</li>
+      </ul>
+      <p class="ctx-block">Not much, or they mix it up with normal coaching: give the full version below. Some of it: confirm what they got right, then fill the gaps. Most of it: one line and move on, e.g. "Exactly, so it's 1:1 coaching on [her/his] own game film to speed up how [she/he] reads the game and makes decisions." Don't re-pitch someone who already gets it.</p>
+      <p class="ctx-block" data-sit="D">This group has already had a PDS, so it's usually short.</p>
+      <p class="ctx-block" data-sit="E">This group has already had a PEM, so you usually skip the full version.</p>
+    </div>
+
+    <h3>What we do (about 30 seconds)</h3>
+    <p class="ctx-block" data-sit="A">Give the full version. A short version of the PDS backing context and mechanism. Give just enough that the PDS feels worth booking. Save the detail for the PDS.</p>
+    <p class="ctx-block" data-sit="B C F">Only if they remember little. A short version of the PDS backing context and mechanism. Give just enough that the PDS feels worth booking. Save the detail for the PDS.</p>
+    <div data-sit="A B C F">
+      <ul>
+        <li>So just to give you a bit of context on who we are: we're ACTA Football Academy. We develop talented juniors by training the part of the game clubs generally don't touch, which is how fast a player's brain reads the game and makes decisions on the field.</li>
+        <li>What you're describing with [XYZ] can look like confidence, anxiety or freezing on the ball, but usually it's a decision-making speed problem. [Her/His] brain is consciously calculating pass, dribble or shoot, and the game moves on before [she/he] can react. That's not [her/his] fault. Nobody's ever trained that part of [her/his] game.</li>
+        <li>We train it with 1:1 coaching using [her/his] own game film. It's the same neuroscience-based process elite pros get trained with, just brought to junior level, and we measure [her/his] decision speed and accuracy before and after.</li>
+        <li>It was all built by Coach Garrett, our founder, over 20 years of coaching. He's developed over 30 youth national team players and hundreds who've gone on to Division One, even professional.</li>
+        <li>So I'm really confident this is something we can help [player] with.</li>
+      </ul>
+    </div>
+    <div data-sit="D E">
+      <details><summary>Full version, only if they've forgotten most of it</summary>
+        <ul>
+          <li>So just to give you a bit of context on who we are: we're ACTA Football Academy. We develop talented juniors by training the part of the game clubs generally don't touch, which is how fast a player's brain reads the game and makes decisions on the field.</li>
+          <li>What you're describing with [XYZ] can look like confidence, anxiety or freezing on the ball, but usually it's a decision-making speed problem. [Her/His] brain is consciously calculating pass, dribble or shoot, and the game moves on before [she/he] can react. That's not [her/his] fault. Nobody's ever trained that part of [her/his] game.</li>
+          <li>We train it with 1:1 coaching using [her/his] own game film. It's the same neuroscience-based process elite pros get trained with, just brought to junior level, and we measure [her/his] decision speed and accuracy before and after.</li>
+          <li>It was all built by Coach Garrett, our founder, over 20 years of coaching. He's developed over 30 youth national team players and hundreds who've gone on to Division One, even professional.</li>
+          <li>So I'm really confident this is something we can help [player] with.</li>
+        </ul>
+      </details>
+    </div>
+    <p class="ctx-block">Pause. If they ask questions, answer briefly, then move to booking: "And that's exactly what we'd go into on the next call."</p>
+  </section>
+
+  <!-- 5. FRAME, QUALIFY, BOOK -->
+  <section>
+    <h2>5. Frame, qualify and book</h2>
+    <p class="ctx-block">Order: frame → price → decision maker → booking → resources. Set the frame first so the Academy feels like something they want to get access to, then qualify on price.</p>
+
+    <h3>Frame</h3>
+    <div data-sit="A B C F">
+      <p class="ctx-block">No PDS yet.</p>
+      <ul>
+        <li>So the next step from here is a call with one of our team, where we go into more depth on [player]'s game and whether [she/he] would be a fit for the Academy.</li>
+        <li>As with any academy, there's a lot of support that goes in from our side, so we're quite careful who we offer places to. This call is really to make sure it's a fit at a high level.</li>
+        <li>All clear on that?</li>
+      </ul>
+    </div>
+    <div data-sit="D E">
+      <p class="ctx-block">Already had a PDS or PEM. This is the PDS running as a PEM, so the player needs to be on it and it can be a one-call close.</p>
+      <ul>
+        <li>So the next step from here is a call with one of our team, where we pick up from where you left off with [rep name] and go back into [player]'s game.</li>
+        <li>Given you've already been through a lot of the background, we can spend most of that call on [player] directly. And if it's a fit, we can get [her/him] started on the call, so you're not waiting around.</li>
+        <li>It's best [player] is on that call too, as [she/he]'ll actually get to experience some of the coaching live.</li>
+        <li>As with any academy, we're quite careful who we offer places to, so the call is still there to make sure it's the right fit.</li>
+        <li>All clear on that?</li>
+      </ul>
+    </div>
+
+    <h3>Price</h3>
+    <aside class="callout"><p><strong>Qualification vs DQ — the rule.</strong> A family qualifies financially if they can access $3,500 USD to start: either as liquid funds they have now, or through credit they are both willing and able to use. If they can access neither, that's a financial DQ. Credit counts — the test is access to the money, not where it comes from.</p></aside>
+
+    <div data-sit="A B C F">
+      <p class="ctx-block">We don't know their financial situation at this point, so run this with everyone and read how much friction comes back. Go deeper where needed.</p>
+      <ul>
+        <li>And have you invested in private coaching or any paid development programmes beyond club fees for [player] before?</li>
+        <li>Ok and so you're aware, we're not some group clinic or app where [player] picks up a few drills, wings it and hopes for the best.</li>
+        <li>It's a pretty exclusive academy, and if you've seen any of the results from our players, it's focused on a different level of outcome to most coaching out there.</li>
+        <li>That being said, there is an investment to join. There are different tiers which above anything just relate to length of coaching, and they range from $3,500 to $7,000.</li>
+        <li>Is that something you'd have access to and would be able to invest in [player]'s development if it seems like the right fit?</li>
+      </ul>
+      <details><summary>If they've already heard the price on a previous call</summary>
+        <ul><li>So you'll remember from your call with [rep name], there's an investment to join, between $3,500 and $7,000 depending on the length of coaching. Is that still something you'd have access to if it's the right fit for [player]?</li></ul>
+      </details>
+    </div>
+    <div data-sit="D E">
+      <p class="ctx-block">They've already heard the price on a previous call, so skip the build-up and go straight to this.</p>
+      <ul>
+        <li>So you'll remember from your call with [rep name], there's an investment to join, between $3,500 and $7,000 depending on the length of coaching. Is that still something you'd have access to if it's the right fit for [player]?</li>
+      </ul>
+      <details><summary>If they don't remember the price, run the full version</summary>
+        <ul>
+          <li>And have you invested in private coaching or any paid development programmes beyond club fees for [player] before?</li>
+          <li>Ok and so you're aware, we're not some group clinic or app where [player] picks up a few drills, wings it and hopes for the best.</li>
+          <li>It's a pretty exclusive academy, and if you've seen any of the results from our players, it's focused on a different level of outcome to most coaching out there.</li>
+          <li>That being said, there is an investment to join. There are different tiers which above anything just relate to length of coaching, and they range from $3,500 to $7,000.</li>
+          <li>Is that something you'd have access to and would be able to invest in [player]'s development if it seems like the right fit?</li>
+        </ul>
+      </details>
+    </div>
+
+    <p class="ctx-block">Go into this if getting pushback with them thinking you're asking them to buy:</p>
+    <ul>
+      <li>Ok and I'm not asking you to invest at this point, this is more for an idea of if this were exactly the thing that gets [player] past [XYZ] and to where you want [her/him] to be, is that something you'd be able to invest in?</li>
+    </ul>
+    <p class="ctx-block">"Do you have payment plans?"</p>
+    <ul>
+      <li>Erm… potentially. It's really dependent on a family's situation. In the vast majority of cases it's up front, but we're also human and understand families have cash flow to manage.</li>
+      <li>Are you saying it would literally be impossible for you to make that kind of investment, or would it just make things a bit easier for you to break it up?</li>
+    </ul>
+    <p class="ctx-block">If they say they have the money, move to decision maker. If not:</p>
+    <ul>
+      <li>Ok, well look, I don't want to book you through to a call if you definitely can't afford it as that's no good for anyone. But we're also humans and we understand that some families who are a really good fit for this don't necessarily have the cash right now to pay in full.</li>
+      <li>Can you just be super open with me about what you have access to right now that you could invest in [player]'s soccer development?</li>
+      <li>Okay, well, look, if this is the right fit, what do you have access to in terms of cash on a debit or credit card?
+        <ul><li>We do also have financing partners that typically enable you to break it up over 24 months. Do you know what your credit rating is off the top of your head?</li></ul>
+      </li>
+    </ul>
+    <p class="ctx-block">Can access $3,500 (cash or credit): carry on. Can't: financial DQ (section 6).</p>
+
+    <h3>Decision maker</h3>
+    <ul>
+      <li>Is there anyone else who'd be involved in decisions about [player]'s development, like another parent or guardian?</li>
+    </ul>
+    <p class="ctx-block">If yes: "Ok great, it's best they're on the call too. Do you know their availability?" If they don't: book a time that works for you two, and ask them to confirm with the partner in the meantime.</p>
+    <aside class="callout warn" data-sit="D E"><p><strong>This matters even more here.</strong> If the partner wasn't on the last call, that's often why it didn't close.</p></aside>
+
+    <h3>Booking</h3>
+    <p class="ctx-block">Book the soonest slot that still leaves time for the resources. Offer only 2–3 options. Book in an INCOGNITO WINDOW using THEIR TIMEZONE, or the CRM pulls cached data from other prospects and their reminder texts show the wrong time. Never say "I'll email you the links". Lock the date and time before hanging up.</p>
+    <ul>
+      <li>So I'm pulling up the calendar here. What timezone are you in?</li>
+      <li>Ok, so I have [time] or [time] on [day], or [time] on [day]. Do any of those work?</li>
+      <li>Great, and I have [email] as your email address. Is that the best one for you?</li>
+      <li>Ok, that's booked for you. Could you check your email to make sure you received it, and that the event is in your calendar? Different inboxes sometimes don't add it automatically.</li>
+      <li>Oh nice, so you're actually booked with [name]. [She/He] works really closely with Coach Garrett and our players and families.</li>
+    </ul>
+    <aside class="callout warn" data-sit="D E"><p><strong>Flag it to the rep before the call</strong> so they know to run the PDS as a PEM and go for the close.</p></aside>
+
+    <h3>Hype the resources</h3>
+    <ul>
+      <li>Before we jump off, it's really important to spend 10–15 minutes going through the resources on how we train players before your call. In particular [XYZ resource], which gives you more context on how this works, so [name] can spend the call applying it to [player] instead of explaining the basics.</li>
+      <li>Will you be able to go through that before the call? Great, I'll send you the link now.</li>
+    </ul>
+  </section>
+
+  <!-- 6. NOT A FIT -->
+  <section>
+    <h2>6. If it's not a fit</h2>
+    <p class="ctx-block">Disqualify respectfully and clearly. No ambiguity.</p>
+    <h3>Player fit DQ</h3>
+    <ul>
+      <li>Ok, so to be very transparent, based on what you've mentioned about [player]'s situation right now, this isn't something we'd be able to help with.</li>
+      <li>Coach Garrett has a lot of free content on our website that helps players improve their decision-making on the field, which could really help [her/him] in the meantime.</li>
+      <li>Thank you for your time, and all the best.</li>
+    </ul>
+    <h3>Financial DQ</h3>
+    <ul>
+      <li>Ok, so to be very transparent, based on what you've mentioned about resources, this won't be something we can help with right now.</li>
+      <li>It sounds like [XYZ] is something we can help [player] with, but it would need to be at a point where you're able to make the investment before we look at booking a call with the team.</li>
+      <li>In the meantime, Coach Garrett has a lot of free content on our website that helps players improve their decision-making on the field, which could really help [her/him] get closer to where you want [her/him] to be.</li>
+      <li>Thank you for your time, and all the best.</li>
+    </ul>
+  </section>
+
+  <!-- 7. CLOSE OUT -->
+  <section>
+    <h2>7. Close out</h2>
+    <ul>
+      <li>That's everything from my side. Is there anything else I can help with while we're on the call?</li>
+      <li>Great, I'll send over the links, and all the best for your call with [rep name].</li>
+    </ul>
+  </section>
+
+  <footer>Source: Notion — Outbound Dial Cheat Sheet (Application Follow-Up), synced 22 Oct 2026. Hand-authored from the rendered Notion output; re-sync when the source doc changes.</footer>
+</main>
+
+<script>
+(function(){
+  var SIT = {
+    A:{name:"Applied, never booked",depth:"Full version",next:"PDS"},
+    B:{name:"Booked a PDS, no-showed",depth:"Check what they remember",next:"PDS"},
+    C:{name:"Booked a PDS, cancelled",depth:"Check what they remember",next:"PDS"},
+    D:{name:"Had a PDS, didn't book or show to the PEM",depth:"Check what they remember, usually short",next:"PDS run as a PEM"},
+    E:{name:"Had a PEM, didn't close",depth:"Check what they remember, usually skip",next:"PDS run as a PEM (one-call close)"},
+    F:{name:"Had a call booked, no data on what happened",depth:"Check what they remember",next:"Depends on their answer"}
+  };
+  var tagged = document.querySelectorAll("[data-sit]:not(.tab)");
+  var tabs = document.querySelectorAll(".tab");
+  function show(key, scroll){
+    if(!SIT[key]) key = "A";
+    tabs.forEach(function(t){ t.setAttribute("aria-selected", t.dataset.sit===key ? "true":"false"); });
+    tagged.forEach(function(el){ el.hidden = el.dataset.sit.split(" ").indexOf(key) === -1; });
+    document.getElementById("sit-name").textContent = SIT[key].name;
+    document.getElementById("sit-depth").textContent = SIT[key].depth;
+    document.getElementById("sit-next").textContent = SIT[key].next;
+    try{ localStorage.setItem("acta-dial-sit", key); }catch(e){}
+    try{ if(location.hash !== "#"+key) history.replaceState(null,"","#"+key); }catch(e){}
+    if(scroll){ var s = document.querySelectorAll("main > section")[1]; if(s) s.scrollIntoView({behavior:"smooth",block:"start"}); }
+  }
+  tabs.forEach(function(t){ t.addEventListener("click", function(){ show(t.dataset.sit, false); }); });
+  document.querySelectorAll("[data-go]").forEach(function(b){ b.addEventListener("click", function(){ show(b.dataset.go, true); }); });
+  var start = (location.hash||"").replace("#","");
+  if(!SIT[start]){ try{ start = localStorage.getItem("acta-dial-sit") || "A"; }catch(e){ start = "A"; } }
+  show(start, false);
+})();
+</script>
+</body>
+</html>
