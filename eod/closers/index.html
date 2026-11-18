@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<meta name="description" content="How to file your end-of-day report: every call on your calendar, what happened, and any money in. About five minutes a day.">
+<title>End-of-day report: closers</title>
+<style>
+  :root{
+    --ink:#101114;
+    --ctx:#2E7CC4;
+    --ctx-bg:#F2F7FC;
+    --rule:#E3E6EB;
+    --muted:#6B7280;
+    --ground:#FFFFFF;
+    --sans:ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  }
+  /* Single-theme by design: these pages are read aloud on live calls and must look
+     identical on every device. */
+  @media (prefers-color-scheme: dark){ :root{ --ground:#FFFFFF; --ink:#101114; } }
+  :root[data-theme="dark"],:root[data-theme="light"]{ --ground:#FFFFFF; --ink:#101114; }
+
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    background:var(--ground); color:var(--ink);
+    font-family:var(--sans); font-size:17px; line-height:1.62;
+    margin:0; padding:0;
+  }
+  main{ max-width:760px; margin:0 auto; padding:56px 24px 96px; }
+  @media (min-width:760px){ main{ padding:88px 40px 120px; } }
+
+  .eyebrow{
+    font-size:11px; font-weight:700; letter-spacing:.11em; text-transform:uppercase;
+    color:var(--muted); margin:0 0 12px;
+  }
+  h1{
+    font-size:clamp(30px,5vw,42px); line-height:1.12; font-weight:800;
+    letter-spacing:-.022em; text-wrap:balance; margin:0 0 14px;
+  }
+  .lede{ color:var(--muted); font-size:17px; margin:0 0 40px; max-width:56ch; }
+
+  h2{
+    font-size:12px; font-weight:700; letter-spacing:.09em; text-transform:uppercase;
+    color:var(--muted); margin:44px 0 14px; padding-top:20px; border-top:1px solid var(--rule);
+  }
+  h2:first-of-type{ margin-top:0; }
+
+  .cards{ display:grid; gap:14px; grid-template-columns:minmax(0,1fr); }
+  @media (min-width:680px){ .cards{ grid-template-columns:repeat(2,minmax(0,1fr)); } }
+
+  a.card{
+    display:block; text-decoration:none; color:inherit;
+    border:1px solid var(--rule); border-radius:10px; padding:22px 22px 20px;
+    background:var(--ground); transition:border-color .12s ease, box-shadow .12s ease;
+  }
+  a.card:hover{ border-color:var(--ctx); box-shadow:0 2px 14px rgba(46,124,196,.10); }
+  a.card:focus-visible{ outline:2px solid var(--ctx); outline-offset:2px; }
+  a.card h3{
+    font-size:19px; font-weight:700; line-height:1.24; letter-spacing:-.012em;
+    margin:0 0 7px;
+  }
+  a.card p{ margin:0; color:var(--muted); font-size:14.5px; line-height:1.5; }
+  a.card .go{
+    display:inline-block; margin-top:14px; font-size:13.5px; font-weight:600; color:var(--ctx);
+  }
+
+  .soon{
+    border:1px dashed var(--rule); border-radius:10px; padding:22px;
+    color:var(--muted); font-size:14.5px;
+  }
+  .soon h3{ font-size:19px; font-weight:700; margin:0 0 7px; color:#9AA0A8; }
+
+  .note{
+    background:var(--ctx-bg); border:1px solid #D6E4F2; border-left:3px solid var(--ctx);
+    border-radius:8px; padding:16px 18px; margin:44px 0 0; color:var(--ctx); font-size:14.5px;
+  }
+  .note p{ margin:0; }
+</style>
+<style>
+  .step{ margin:40px 0 0; }
+  .step h3{ font-size:21px; font-weight:750; letter-spacing:-.012em; margin:0 0 8px; display:flex; gap:10px; align-items:baseline; }
+  .step h3 .n{ flex:none; display:inline-block; width:30px; height:30px; border-radius:50%; background:#e11d2e; color:#fff; font-size:15px; line-height:30px; text-align:center; font-weight:800; }
+  .step p{ margin:0 0 12px; } .step ul{ margin:0 0 12px; padding-left:22px; } .step li{ margin:4px 0; }
+  .shot{ display:block; width:100%; height:auto; border:1px solid var(--rule); border-radius:10px; margin:6px 0 0; }
+  .back{ font-size:14px; color:var(--ctx); text-decoration:none; } .back:hover{ text-decoration:underline; }
+  main{ max-width:900px; }
+</style>
+</head>
+<body>
+<main>
+  <p><a class="back" href="../../">← Sales Library</a></p>
+  <p class="eyebrow">ACTA Academy · Garrett, Brad, Graham</p>
+  <h1>End-of-day report: closers</h1>
+  <p class="lede">How to file your end-of-day report: every call on your calendar, what happened, and any money in. About five minutes a day.</p>
+  <section class="step"><h3><span class="n">1</span>Open your report</h3><p>Open the private link Tommy sent you and bookmark it. It opens your own report with your name on it. File it every day you had calls, by <b>10pm Pacific</b>. If you are filing after midnight, pick <b>Yesterday</b>.</p><img class="shot" src="../img/closer-1-open.png" alt="Open your report" loading="lazy"></section><section class="step"><h3><span class="n">2</span>Go through each call</h3><p>Every call on your calendar for the day is listed. For each one:</p><ul><li><b>What happened</b>: No-show, Cancelled, Rescheduled or Showed.</li><li><b>Pipeline stage</b>: where it goes now.</li><li><b>Offer made?</b> Yes or No.</li><li><b>Notes</b>: always required.</li></ul><p>The top right of each call shows who booked it. If Jules confirmed or qualified it, that shows there too.</p><img class="shot" src="../img/closer-2-showed.png" alt="Go through each call" loading="lazy"></section><section class="step"><h3><span class="n">3</span>A close</h3><p>Pick <b>Deal Won</b> (or <b>Deposit Collected</b>), then the product, the <b>cash collected today</b>, the <b>full deal value</b> and who set it (<b>No setter</b> if nobody did).</p><img class="shot" src="../img/closer-3-close.png" alt="A close" loading="lazy"></section><section class="step"><h3><span class="n">4</span>No-show, cancelled or rescheduled</h3><p>One click, then a note on what you tried. For a reschedule, move it on the calendar as normal; the new time is picked up from the calendar.</p><img class="shot" src="../img/closer-4-noshow.png" alt="No-show, cancelled or rescheduled" loading="lazy"></section><section class="step"><h3><span class="n">5</span>Money from someone not on your calls today</h3><p>An instalment on an earlier deal, or a close that happened after the call: press <b>Add cash entry</b>, find the person, check the product and which payment it is, enter the amount and what it is for, then <b>Add to this report</b>. Only fill in revenue for a new sale; a later instalment has none.</p><img class="shot" src="../img/closer-5-cash.png" alt="Money from someone not on your calls today" loading="lazy"></section><section class="step"><h3><span class="n">6</span>Submit</h3><p>When every call is done the button turns blue. You can open the report again and change it later; it keeps a history of changes.</p><img class="shot" src="../img/closer-6-submit.png" alt="Submit" loading="lazy"></section>
+  <div class="note"><p>Screens show sample prospects. This report is recorded on the dashboard only: keep moving deals and adding notes in the CRM as normal.</p></div>
+</main>
+</body>
+</html>
